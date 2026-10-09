@@ -1,0 +1,140 @@
+schema_version: "1.0"
+
+name: Evidence Currency
+
+applied_definition: |
+  Evidence currency measures, at the moment a release or deployment decision is
+  made, whether the recorded verdicts behind that decision still describe the
+  exact content being released. It does not measure whether that content passed.
+
+  A *verdict* is a recorded result of a check (an automated test, a scanner, an
+  evaluation run, a human review). Each verdict is bound to the step $s$ that
+  produced it and, for every file it covers, to that file's path $p$ and the
+  content hash of the bytes examined, $h$ (a git blob id). At a revision $r$, let
+  $S_s(r)$ be the set of paths in step $s$'s declared scope, and $h_r(p)$ the
+  content hash of path $p$ at $r$. Each pair $(s, p)$ with $p \in S_s(r)$ is in
+  exactly one state:
+
+  - **current**: a verdict exists for $(s, p, h_r(p))$;
+  - **stale**: a verdict exists for $(s, p)$, but only at hashes other than
+    $h_r(p)$, so the file has changed since it was examined;
+  - **never examined**: no verdict exists for $(s, p)$ at any hash.
+
+  Per step, with $n_s = |S_s(r)| = c_s + t_s + u_s$ (current, stale, never
+  examined):
+
+  $$\mathrm{currency}_s(r) = \frac{c_s}{n_s}$$
+
+  The aggregate is computed over all (step, path) pairs of applicable steps:
+
+  $$\mathrm{currency}(r) = \frac{\sum_s c_s}{\sum_s n_s}$$
+
+  Reporting rules, all part of the method:
+
+  1. $c_s$, $t_s$ and $u_s$ are always reported alongside the ratio, never
+     only the ratio. Stale and never-examined content call for different
+     remedies (re-run versus first run).
+  2. A step with $n_s = 0$ is reported as **not applicable**, with currency
+     undefined (null), and is excluded from the aggregate. An empty scope is
+     never reported as 100%.
+  3. A current verdict counts as current whether it recorded a pass or a fail.
+     Currency is a property of the evidence, not of the outcome; pass rates
+     are reported separately.
+
+submitter_organizations:
+  - "TODO(Tim): organization name"
+
+contact_email: "TODO(Tim)@example.org"
+
+ai_rmf_characteristics:
+  - Valid & Reliable
+  - Accountable & Transparent
+
+ai_lifecycle_stages:
+  - Build
+  - Deploy
+  - Operate & Monitor
+
+object_of_measurement:
+  - system
+
+model_specificity: model agnostic
+domain_specificity: domain agnostic
+
+usage_details: |
+  Use it at a decision point (merge, release, deployment, re-certification)
+  where an AI system's assurance case cites earlier test, evaluation or review
+  results. Typical subjects are the files those results were computed on:
+  prompt templates, guardrail and policy configurations, evaluation datasets
+  and harness code, agent tool definitions, model cards. Typical steps are the
+  evaluations and reviews required for each. The question it answers is: of
+  the evidence this decision relies on, how much was produced against the
+  exact bytes being shipped?
+
+  It is most useful where content changes faster than checks are re-run. One
+  example is agent-assisted development, in which code and configuration change
+  many times between gate runs. Another is a long-lived assurance record whose
+  subjects are edited after review. In both settings a pass recorded on earlier
+  bytes can keep counting after the content changes. Binding each verdict to a
+  content hash makes that visible as stale rather than current.
+
+  The stale and never-examined counts give the remedy directly: stale subjects
+  need a re-run, and never-examined subjects need a first run. A team can set a
+  required currency per step (for example 100% for a safety evaluation, lower
+  for an advisory check) without changing what is measured.
+
+  Grounding: no peer-reviewed source we know of defines this exact measurement.
+  Regression test selection (Gligoric et al., 2015) and build-system verifying
+  traces (Mokhov et al., 2018) establish the underlying principle: a recorded
+  result is valid only while the hashes of the exact content it was computed on
+  are unchanged. Evidence currency applies that per-result validity predicate at
+  decision time, as a measurement. It reports current, stale, never-examined and
+  not-applicable counts separately rather than as one pass rate.
+
+known_failure_modes: |
+  1. Recorded, not re-run. The metric counts verdicts as recorded. It does not
+     re-execute the checks, so a fabricated or mistaken record counts as
+     current. It is only as trustworthy as whatever writes the records.
+  2. Scope defines the denominator. If a step's declared scope omits files the
+     check should cover, those files appear in no state, and currency can read
+     100% while relevant content was never examined. Scope declarations need
+     their own review.
+  3. Checker changes are invisible. Only the subject files' bytes decide
+     current versus stale. If the check itself changes (a new evaluator
+     version, a different threshold), earlier verdicts stay current unless the
+     checker's own files are declared as part of the step's scope.
+  4. Content outside the tracked tree. Inputs the hash does not cover (remote
+     model weights fetched at run time, external APIs, environment variables,
+     random seeds) can change without making any verdict stale.
+  5. Not a quality measure. 100% currency with every verdict a FAIL is
+     possible. Read currency together with the pass/fail outcomes, never as a
+     substitute for them.
+  6. The aggregate hides structure. A high total can mask one critical step
+     at low currency. Report per-step values, especially for safety-relevant
+     steps.
+
+references:
+  - >-
+    Gligoric, M., Eloussi, L., & Marinov, D. (2015). "Practical Regression
+    Test Selection with Dynamic File Dependencies." Proceedings of the 2015
+    International Symposium on Software Testing and Analysis (ISSTA 2015),
+    ACM, 211-222. https://doi.org/10.1145/2771783.2771784
+  - >-
+    Mokhov, A., Mitchell, N., & Peyton Jones, S. (2018). "Build Systems à la
+    Carte." Proceedings of the ACM on Programming Languages, 2(ICFP), Article
+    79. https://doi.org/10.1145/3236774
+
+implementation_resources:
+  - >-
+    https://github.com/timbrigham/mcp-mayhem/tree/8207aa5f08b66632b07f2d52130664a49daee05c/verdictLedger/examples/evidence-currency
+  - >-
+    https://github.com/timbrigham/mcp-mayhem/tree/8207aa5f08b66632b07f2d52130664a49daee05c/verdictLedger
+
+computational_requirements: >-
+  CPU only, negligible cost. Python 3.11 or later and git 2.28 or later. No
+  third-party Python packages; the code uses only the standard library. It
+  needs a full checkout of the linked repository, because verdictLedger
+  imports a shared module beside it. The worked example runs in under a
+  minute.
+
+usage_rights: Implementation is open source under the MIT License.
