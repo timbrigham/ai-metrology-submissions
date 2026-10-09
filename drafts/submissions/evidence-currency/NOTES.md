@@ -75,4 +75,19 @@ No peer-reviewed source defines this exact measurement. The two below establish 
 ## Still to do before drafting the YAML
 - [x] References.
 - [ ] Decide the exact number(s) the YAML defines.
-- [ ] Fix gaps 1–3 in mcp-mayhem (Tim's repo, so his call).
+- [x] Gaps 1–3 fixed by mcp-mayhem-48 in `8207aa5f08b66632b07f2d52130664a49daee05c` (on origin/main).
+  - Verified here on 2026-10-09 from a clean `git archive 8207aa5`:
+    - `python -I examples/evidence-currency/run_example.py` exits 0, with 4 scenarios: 100% → stale 75% → never-examined 60% → re-checked 80%;
+    - the JSON includes a `definition` string;
+    - tests: 645 passed, 1 failed. The failure is CRLF from the Windows export, which is environmental.
+  - YAML links:
+    - https://github.com/timbrigham/mcp-mayhem/tree/8207aa5f08b66632b07f2d52130664a49daee05c/verdictLedger/examples/evidence-currency
+    - https://github.com/timbrigham/mcp-mayhem/tree/8207aa5f08b66632b07f2d52130664a49daee05c/verdictLedger
+  - Command, run from verdictLedger/: `python -m core.cli --repo <repo> --data <records.jsonl> evidence-currency --ref HEAD [--json]`
+  - Caveats the YAML must state:
+    - it needs a full checkout of mcp-mayhem, not a pip package;
+    - it counts RECORDED verdicts and does not re-run them;
+    - a current FAIL counts as current, so this is not a pass rate;
+    - editing a checker does not make its verdicts stale;
+    - per-step `status` can read SATISFIED while currency < 100% (never-examined is reported, not blocking), so the YAML must not use `status` as the metric.
+- [ ] Draft the YAML. Then a separate adversarial review, then Tim's OK.
