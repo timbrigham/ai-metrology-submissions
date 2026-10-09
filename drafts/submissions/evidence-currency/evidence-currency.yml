@@ -62,69 +62,48 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  AI systems are released with claims attached: a model or system card states
-  that a safety evaluation was run, an assurance case cites a red-team review,
-  a release checklist records that the tool definitions were approved. Those
-  claims are only as good as the evidence behind them, and that evidence was
-  produced against particular versions of particular files. Evidence currency
-  asks, at the release decision, how much of the evidence behind each claim
-  was produced against the exact bytes being released.
+  Use it at a release or deployment decision, to check whether the evaluations
+  a release cites (in a model or system card, an assurance case or a release
+  checklist) were run against the exact files being shipped.
 
-  Example. An LLM application's release cites a safety evaluation run over
-  `prompts/system.md`, `guardrails/policy.yaml`, `tools/search.json` and
-  `evals/safety_set.jsonl`. Every recorded result is a PASS. After the run,
-  the system prompt is edited and a new tool definition, `tools/browse.json`,
-  is added. At release, the safety evaluation's currency is 3/5 (60%): one
-  subject is stale (the edited prompt) and one was never examined (the new
-  tool). Until the evaluation is re-run, the release's "evaluated for safety"
-  claim describes a system that is no longer the one being shipped. Counting
-  only the recorded results, all 4 of 4 are PASS. A coarser check ("were the
-  results recorded at an older commit than the release?") would flag the
-  release but not say which files moved or which were never examined. The
-  linked worked example runs exactly this scenario.
+  Example. A safety evaluation passed over `prompts/system.md`,
+  `guardrails/policy.yaml`, `tools/search.json` and `evals/safety_set.jsonl`.
+  The system prompt is then edited and a tool, `tools/browse.json`, is added.
+  At release, currency is 3/5 (60%): one file stale, one never examined, while
+  the recorded results still read 4 of 4 PASS. Stale files need a re-run, and
+  never-examined files need a first run. A per-commit check would flag the
+  release but not say which files. The linked worked example runs this
+  scenario. A team can set a per-step threshold (e.g. 100% for a safety
+  evaluation) without changing what is measured.
 
-  The counts give the remedy directly: stale subjects need a re-run, and
-  never-examined subjects need a first run. A team can require a currency per
-  step (for example 100% for a safety evaluation, lower for an advisory check)
-  without changing what is measured.
-
-  Grounding: this is a new measurement. Its primary methodological
-  specification is the worked example's README in the linked implementation.
-  No peer-reviewed source we know of defines it. Its validity predicate (a
-  recorded result holds only while the hashes of its exact inputs are
-  unchanged) is the one used in regression test selection (Gligoric et al.,
-  2015). Its decision-time, per-step check of recorded evidence against the
-  hashes of the delivered artifacts, with missing steps detected as missing,
-  follows in-toto (Torres-Arias et al., 2019). Evidence currency turns that
-  check into a measurement: per-step counts of current, stale and
-  never-examined evidence, rather than a single pass/fail.
+  Grounding: this is a new measurement. Its primary specification is the
+  README of the worked example in the linked implementation, and no
+  peer-reviewed source we know of defines it.
+  - Its validity rule (a recorded result holds only while the hashes of its
+    inputs are unchanged) is the one used in regression test selection
+    (Gligoric et al., 2015).
+  - Its per-step check of recorded evidence against the hashes of the
+    delivered artifacts follows in-toto (Torres-Arias et al., 2019).
+  The implementation is a recent, single-author research prototype, not a
+  packaged library, and has not been independently replicated or adopted
+  elsewhere.
 
 known_failure_modes: |
-  1. Recorded, not re-run. The metric counts verdicts as recorded. It does not
-     re-execute the checks, so a fabricated or mistaken record counts as
-     current. It is only as trustworthy as whatever writes the records.
-  2. Scope defines the denominator. If a step's declared scope omits files the
-     check depends on, those files appear in no state, and currency can read
-     100% while relevant content was never examined. Scope declarations need
-     their own review.
-  3. Checker changes count only if declared. Only the bytes of files in
-     $S_s(r)$ decide current versus stale. If the check itself changes (a new
-     evaluator version, a different threshold), earlier verdicts stay current
-     unless the checker's own files are declared as dependencies of the step
-     (in the reference implementation, `switches`, which every record for the
-     step must then cover).
-  4. Content outside the tracked tree. Inputs the hash does not cover (model
-     weights fetched at run time, remote APIs, environment variables, random
-     seeds) can change without making any verdict stale. Datasets and weights
-     stored as Git LFS or DVC pointer files are covered only to the extent the
-     pointer's embedded content hash changes with them. That follows from the
-     pointer format and is not exercised by the worked example.
-  5. Matching is by path and content. A file renamed without changing its
-     bytes counts as never examined until a verdict names the new path.
-  6. Not a quality measure. 100% currency with every verdict a FAIL is
-     possible. Read currency together with outcomes, never as a substitute.
-  7. The aggregate hides structure. A high total can mask one safety-relevant
-     step at low currency. Report per-step values.
+  1. Records are not re-run. A fabricated or mistaken record counts as
+     current; the metric is only as trustworthy as whatever writes records.
+  2. Scope sets the denominator. Files a check depends on but its scope omits
+     appear in no state, so currency can read 100% while they were never
+     examined. Scope declarations need their own review.
+  3. Checker changes count only if declared. A new evaluator version or
+     threshold leaves earlier verdicts current unless the checker's files are
+     declared as dependencies of the step (`switches` in the implementation).
+  4. Untracked inputs. Weights fetched at run time, remote APIs, environment
+     variables and seeds can change without making any verdict stale.
+  5. Renames. A file renamed without changing its bytes counts as never
+     examined until a verdict names the new path.
+  6. Not a quality measure. Currency can be 100% with every verdict a FAIL.
+     Read it together with outcomes, and per step, since a high total can
+     hide one safety-relevant step at low currency.
 
 references:
   - >-

@@ -43,3 +43,10 @@ Lead with the AI-accountability version: "are your published claims (model and s
 - Contact: `timbrigham@zeroparadox.org`.
 - Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
 - Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
+
+## NIST change on 2026-10-09: conciseness is now a criterion
+- hbooth on #19 (2026-10-09 18:32 UTC): "Rejected and Please Resubmit after we have provided additional clarifications regarding what we are looking for … clear and concise descriptions of the submitted metric such that it can be understood, with minimal effort on the part of a human reader." The PR is still open.
+- Consequences:
+  - Our #19 comment is ON HOLD. The PR is effectively rejected, so evidence there now has little value.
+  - All three YAMLs need a conciseness pass. #19 was about 540 words when rejected.
+  - WAIT for NIST's promised clarification before submitting anything. This fits the one-tag plan.
