@@ -49,5 +49,43 @@ Read strictly, gitRobot's Tier 1 restrictions are execution-verified at the libr
 3. Ideally, executed refusals through the MCP surface too, so that "every surface" can be met rather than only reported.
 4. An AI-agent framing in the README: the `reset --hard` incident, where the agent truthfully reported "clean" after destroying work.
 
-## Overlap and references
-Pending the research agent.
+## Overlap (research agent, 2026-10-09): ADJACENT, not a duplicate
+**Catalogue "Agent / Tool Abuse Testing"** is the main risk of being folded in.
+- Its definition, which I checked verbatim: "Testing whether a system misuses connected tools or external actions through, e.g., unsafe tool selection, excessive agency, unauthorized action attempts, or harmful task execution."
+- Its TEVV application is red teaming, and its listed tools include AgentDojo.
+- **What distinguishes ours:** it measures whether the **enforcement layer refuses**, not whether the **agent misbehaves**.
+  - The denominator is the system's own claimed restriction set R, not a set of adversarial cases.
+  - There is no adversarial prompting, and the result is deterministic.
+  - It is model-agnostic.
+  - Say "containment of unauthorized action attempts, not their occurrence" in the first sentence.
+
+**Other catalogue entries:** Defense Efficacy, Refusal Rate and Jailbreak Success Rate are different, because they concern the model. Nothing in the catalogue covers sandboxing, permissions, least privilege or audit logging.
+
+**Open PRs:**
+- **#20** (descriptor mutation) is closest in structure. It shares the "configured versus effective" move, but measures definition integrity, not enforcement. It already cites Jia & Harman, so we should not reuse that.
+- **#16** (audit tamper detection) is ADJACENT to the audit-completeness figure only. It explicitly excludes records that were never written ("Does not measure resistance to agent-internal log fabrication"). Cite it as complementary.
+- #8, #15, #17, #19, #23, #6, #21 and #22 are different.
+
+## References (I checked the starred items myself: quote in the text, DOI/venue/pages in Crossref)
+1. ★ **Martin, E. & Xie, T., "A Fault Model and Mutation Testing of Access Control Policies," WWW 2007, 667-676.** https://doi.org/10.1145/1242572.1242663
+   - "Rule coverage is the number of covered rules divided by the number of total rules."
+   - It is the analogous ratio, computed at the policy decision point.
+2. ★ **El Kateb, D., El Rakaiby, Y., Mouelhi, T. & Le Traon, Y., "Access Control Enforcement Testing," AST 2013 (IEEE), 64-70.** https://doi.org/10.1109/IWAST.2013.6595793
+   - "PEPs are generally implemented manually, which can introduce errors in policy enforcement and lead to security vulnerabilities."
+   - "...verify for every sensitive access whether the policy is correctly enforced."
+   - Specified versus actually enforced is our distinction exactly. It defines no ratio.
+- Optional: NIST SP 800-192 (Hu, Kuhn, Yaga, 2017), verification and test methods for access-control policies. This is a NIST technical method, not governance. The agent quoted it, and I have not checked it.
+- **Rejected:**
+  - AgentDojo and ToolEmu: they measure behaviour, AgentDojo is already a tool of the catalogue entry, and ToolEmu emulates execution rather than executing.
+  - R-Judge and Agent-SafetyBench: they concern risk awareness, and their venues are unverified.
+  - Le Traon ISSRE 2007 and Mouelhi TAIC 2007: closed access, text unverified.
+  - Saltzer & Schroeder: principles only.
+
+**Draft candour sentence:** "To our knowledge no published work defines this ratio for AI-agent tool mediation. The references define the analogous rule-coverage ratio for access-control policies (Martin & Xie) and test that enforcement points actually deny (El Kateb et al.). This metric applies that idea at the agent's tool boundary and has not been independently validated."
+
+## Framing (adopted)
+"Claimed-restriction verification rate for agent tool mediation": of the restrictions a system claims on its agent's tools, the fraction shown to refuse when the forbidden action is actually attempted through every exposed surface, with protected state confirmed intact.
+- It is the enforcement-point counterpart of rule coverage, applied at the agent's tool boundary.
+- Keep the per-restriction report (verified-by-execution / verified-by-absence / unverified / failed) central, and the ratio secondary.
+- **Known failure mode: a gameable denominator.** A narrow R inflates the score, so publish |R| and where it came from.
+- Audit completeness is a SECONDARY figure, explicitly complementary to #16.
