@@ -23,5 +23,5 @@ This folder lives on the `drafts` branch of Tim's fork.
 |---|---|---|
 | `comments/pr19/` | #19 paired-control non-measurement | drafted, 2 review rounds, awaiting Tim's OK |
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
-| `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; 3 packaging gaps and the references still to do |
+| `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references found; 3 packaging gaps sent to mcp-mayhem-48 |
 | (none) | new: NL-to-formal claim faithfulness | idea only |

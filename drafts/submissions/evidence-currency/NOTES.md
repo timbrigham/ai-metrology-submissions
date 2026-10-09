@@ -45,9 +45,34 @@
   - #21 is unrelated: it is a premise audit, and its hash is only a certificate.
 - I have not read #23 in full myself.
 
+## References (researched 2026-10-09; quotes read in the full-text PDFs)
+No peer-reviewed source defines this exact measurement. The two below establish the principle: a recorded result is valid only while the hashes of its exact inputs are unchanged.
+
+1. **Gligoric, Eloussi & Marinov, "Practical Regression Test Selection with Dynamic File Dependencies," ISSTA 2015, ACM.** https://doi.org/10.1145/2771783.2771784
+   - DOI checked in Crossref.
+   - "For each test entity, Ekstazi checks if the checksums of all used files are still the same. If so, the test entity is not selected." (§3)
+   - "Our insight is to view RTS as memoization: if none of the dependent files for some test changed, then the test need not be run." (§7)
+   - "Ekstazi tracks even files that were attempted to be accessed but did not exist" (§7). This bears on never-examined content.
+2. **Mokhov, Mitchell & Peyton Jones, "Build Systems à la Carte," Proc. ACM Program. Lang. 2(ICFP), Art. 79, 2018.** https://doi.org/10.1145/3236774
+   - DOI resolves.
+   - "4.2.2 Verifying Traces. An alternative way to determine if a key is dirty is to record the values/hashes of dependencies used last time, and if something has changed, the key is dirty and must be rebuilt — in essence a trace which we can use to verify existing values."
+   - Verified in the extracted text.
+   - The JFP 2020 extended version's DOI is NOT verified. Cite the ICFP one.
+
+**AI-specific alternate:** Schnabl, Hugenroth, Marino & Beresford, "Attestable Audits," arXiv:2506.23706.
+- An ICML 2025 workshop paper (TAIG), not main track.
+- It binds benchmark results to model, code and data hashes, but has no staleness counts.
+
+**Rejected:**
+- in-toto (USENIX Sec 2019): tamper detection, a single pass/fail.
+- RTSLinux (FSE 2017): redundant with Ekstazi.
+- Nix/Dolstra: not fetched.
+- SLSA: not peer-reviewed.
+- Several arXiv preprints: verified at snippet level only.
+
+**Candour sentence (draft):** "No peer-reviewed source we know of defines this exact measurement. Regression test selection (Gligoric et al., ISSTA 2015) and build-system verifying traces (Mokhov et al., ICFP 2018) establish the underlying principle: a recorded result is valid only while the checksums of the exact content it was computed on are unchanged. Evidence currency applies that per-result validity predicate at decision time and reports the counts (current, stale, never examined, not applicable) separately rather than as one pass rate."
+
 ## Still to do before drafting the YAML
-- [ ] References: 1–2 sources on the METHOD.
-  - Candidates to search: build systems that key results on content hashes (Bazel, Nix, "build systems à la carte"), and in-toto/SLSA attestation binding to a digest.
-  - Every one must be verified at the source.
+- [x] References.
 - [ ] Decide the exact number(s) the YAML defines.
 - [ ] Fix gaps 1–3 in mcp-mayhem (Tim's repo, so his call).
