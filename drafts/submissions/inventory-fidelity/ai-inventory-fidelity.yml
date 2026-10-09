@@ -1,0 +1,130 @@
+schema_version: "1.0"
+
+name: AI Inventory Fidelity
+
+applied_definition: |
+  Measures whether an organisation's inventory of the components of an AI
+  system describes what is actually deployed or released. It does so by
+  reconciling the inventory against a scan of the artifact, keyed on identity
+  and content.
+
+  The inventory $I$ holds active entries (name $n$, content hash $h$) for the
+  system's components: prompt templates, tool definitions, guardrail and policy
+  configurations, and model and dataset references by digest. It also lists
+  retired names. A scan of the artifact yields the set $P$ of present
+  components (name, hash). Each name is in exactly one class:
+
+  - **matched**: active in $I$ and present in $P$ with the same hash;
+  - **modified**: active in $I$ and present in $P$ under the same name, but
+    with a different hash, so the registered content is not what is deployed;
+  - **vanished**: active in $I$, absent from $P$;
+  - **phantom**: present in $P$, absent from $I$ (neither active nor retired);
+  - **resurrected**: retired in $I$, present in $P$.
+
+  With $m$ matched, $d$ modified, $v$ vanished, $p$ phantom and $z$ resurrected:
+
+  $$\mathrm{inventory\ precision} = \frac{m}{m + d + v}, \qquad \mathrm{inventory\ recall} = \frac{m}{m + d + p + z}$$
+
+  Precision is the share of active inventory entries that correctly describe
+  something deployed. Recall is the share of deployed components that the
+  inventory correctly describes.
+
+  Reporting rules, all part of the method:
+
+  1. All five counts are reported, with the names in every class other than
+     matched. Never report only the ratios.
+  2. Reconciliation never resolves a mismatch silently. A rename with no
+     recorded rename appears as one vanished plus one phantom.
+  3. Measuring does not change the inventory. The reconciliation is
+     read-only.
+
+submitter_organizations:
+  - Tim Brigham (independent researcher)
+
+contact_email: timbrigham@zeroparadox.org
+
+ai_rmf_characteristics:
+  - Accountable & Transparent
+
+ai_lifecycle_stages:
+  - Deploy
+  - Operate & Monitor
+
+object_of_measurement:
+  - system
+
+model_specificity: model agnostic
+domain_specificity: domain agnostic
+
+usage_details: |
+  Governance practice asks organisations to keep an inventory of their AI
+  systems (for example, NIST AI RMF GOVERN 1.6: "Mechanisms are in place to
+  inventory AI systems"). It does not say how to tell whether that inventory
+  is true. This method answers that question at a point in time: does the
+  inventory describe what is actually running?
+
+  Use it at release, at deployment, and periodically in operation. Its value
+  is highest for the components that conventional software bills of
+  materials do not cover and that change most often in AI systems: prompt
+  templates, tool definitions, guardrail configurations, and pinned model and
+  dataset digests.
+
+  The five classes call for different follow-up:
+  - **modified**: content changed under a registered name, the AI
+    supply-chain substitution case. Review the change, then re-register.
+  - **vanished**: a registered component is no longer deployed. Retire it or
+    restore it.
+  - **phantom**: a deployed component was never registered. Register and
+    review it.
+  - **resurrected**: a retired component has reappeared. Investigate.
+
+  Example: an agent's inventory lists a system prompt, two tool definitions
+  and a guardrail policy. The deployed artifact has an edited system prompt,
+  the two tools, an unregistered third tool, and no guardrail policy. The
+  counts are matched 2, modified 1, vanished 1, phantom 1, resurrected 0.
+  Precision is 2/4 and recall is 2/4.
+
+  Grounding: this is a new measurement for AI-system inventories. Its primary
+  methodological specification is the README of the linked worked example.
+  The underlying measurement is identity-keyed precision and recall of a
+  claimed component list against observed ground truth, as used to evaluate
+  software bills of materials (Balliu et al., 2023; Yu et al., 2024). This
+  method's extensions are the AI-specific component scope, matching on
+  content hash as well as name, and the separately reported classes.
+
+known_failure_modes: |
+  1. The scan defines ground truth. Components the scanner cannot see
+     (loaded at run time, fetched from a remote registry, built in memory)
+     count as neither present nor phantom. Scanner coverage needs its own
+     review and must be stated with the result.
+  2. Identity conventions matter. Inconsistent naming between inventory and
+     scan inflates vanished and phantom together. A recorded rename avoids
+     this; an unrecorded one is deliberately not guessed.
+  3. The hash covers only what is hashed. A model referenced by name and tag
+     rather than by digest can change without becoming "modified".
+     Reference models and datasets by content digest.
+  4. Point in time. Fidelity describes the artifact scanned. A different
+     environment (staging versus production) needs its own scan.
+  5. Fidelity is not quality. A perfectly accurate inventory of an unsafe
+     system scores 100%.
+
+references:
+  - >-
+    Balliu, M., Baudry, B., Bobadilla, S., Ekstedt, M., Monperrus, M., Ron,
+    J., Sharma, A., Skoglund, G., Soto-Valero, C., & Wittlinger, M. (2023).
+    "Challenges of Producing Software Bill of Materials for Java." IEEE
+    Security & Privacy, 21(6), 12-23. https://doi.org/10.1109/MSEC.2023.3302956
+  - >-
+    Yu, S., Song, W., Hu, X., & Yin, H. (2024). "On the Correctness of
+    Metadata-Based SBOM Generation: A Differential Analysis Approach."
+    54th Annual IEEE/IFIP International Conference on Dependable Systems and
+    Networks (DSN 2024), 29-36. https://doi.org/10.1109/DSN58291.2024.00018
+
+implementation_resources:
+  - "TODO: worked example in mcp-mayhem (structuredJsonValidator), pinned to the release tag"
+
+computational_requirements: >-
+  CPU only, negligible cost. Hashing cost scales with artifact size; no model
+  and no GPU.
+
+usage_rights: Implementation is open source under the MIT License.
