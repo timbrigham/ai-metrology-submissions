@@ -37,3 +37,9 @@ CI gates are the proof that what we claim is what we do. The chain:
 3. evidence that is still current for the bytes shipped (evidence currency).
 
 Lead with the AI-accountability version: "are your published claims (model and system cards, assurance cases) still backed by evidence about what you are releasing?"
+
+## Decisions (Tim, 2026-10-09)
+- Submitter: `Tim Brigham (independent researcher)`. 6 of 13 open PRs are by independents, so there is precedent.
+- Contact: `timbrigham@zeroparadox.org`.
+- Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
+- Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
