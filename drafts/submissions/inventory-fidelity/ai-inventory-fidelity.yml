@@ -3,40 +3,33 @@ schema_version: "1.0"
 name: AI Inventory Fidelity
 
 applied_definition: |
-  Measures whether an organisation's inventory of the components of an AI
-  system describes what is actually deployed or released. It does so by
-  reconciling the inventory against a scan of the artifact, keyed on identity
-  and content.
+  Measures whether an inventory of an AI system's components (prompt templates,
+  tool definitions, guardrail and policy configurations, and model and dataset
+  references by digest) describes what is actually deployed. It reconciles the
+  inventory against a scan of the deployed artifact, without modifying the
+  inventory.
 
-  The inventory $I$ holds active entries (name $n$, content hash $h$) for the
-  system's components: prompt templates, tool definitions, guardrail and policy
-  configurations, and model and dataset references by digest. It also lists
-  retired names. A scan of the artifact yields the set $P$ of present
-  components (name, hash). Each name is in exactly one class:
+  The inventory $I$ maps each active name to a content hash and lists retired
+  names; a name may not be both. The scan yields $P$, mapping each present name
+  to a hash. Names must be unique in $I$ and in $P$. A duplicate, a scanned item
+  with no name, or a reference with no content digest is reported as an error,
+  not classified. Hashes are SHA-256 over a canonical form declared for each
+  component type, and the same form is used at registration and at scan. Every
+  name in $I \cup P$ falls in exactly one class:
 
-  - **matched**: active in $I$ and present in $P$ with the same hash;
-  - **modified**: active in $I$ and present in $P$ under the same name, but
-    with a different hash, so the registered content is not what is deployed;
-  - **vanished**: active in $I$, absent from $P$;
-  - **phantom**: present in $P$, absent from $I$ (neither active nor retired);
-  - **resurrected**: retired in $I$, present in $P$.
+  - **matched**: active, present, same hash;
+  - **modified**: active, present, different hash;
+  - **vanished**: active, absent;
+  - **phantom**: present, not in $I$;
+  - **resurrected**: retired, present;
+  - **retired-absent**: retired, absent (correct; not counted).
 
-  With $m$ matched, $d$ modified, $v$ vanished, $p$ phantom and $z$ resurrected:
+  With counts $m, d, v, p, z$:
 
-  $$\mathrm{inventory\ precision} = \frac{m}{m + d + v}, \qquad \mathrm{inventory\ recall} = \frac{m}{m + d + p + z}$$
+  $$\mathrm{precision} = \frac{m}{m+d+v}, \qquad \mathrm{recall} = \frac{m}{m+d+p+z}$$
 
-  Precision is the share of active inventory entries that correctly describe
-  something deployed. Recall is the share of deployed components that the
-  inventory correctly describes.
-
-  Reporting rules, all part of the method:
-
-  1. All five counts are reported, with the names in every class other than
-     matched. Never report only the ratios.
-  2. Reconciliation never resolves a mismatch silently. A rename with no
-     recorded rename appears as one vanished plus one phantom.
-  3. Measuring does not change the inventory. The reconciliation is
-     read-only.
+  Either ratio is undefined when its denominator is 0. The five counts and the
+  names in every non-matched class are always reported with the ratios.
 
 submitter_organizations:
   - Tim Brigham (independent researcher)
@@ -57,55 +50,66 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  Governance practice asks organisations to keep an inventory of their AI
-  systems (for example, NIST AI RMF GOVERN 1.6: "Mechanisms are in place to
-  inventory AI systems"). It does not say how to tell whether that inventory
-  is true. This method answers that question at a point in time: does the
-  inventory describe what is actually running?
+  In AI systems, much of the behaviour is set by unversioned text, such as
+  system prompts, tool schemas and guardrail policies, that sits outside
+  package managers. This method measures whether the registered content of
+  those artifacts is the content actually running. Governance practice asks
+  organisations to keep an AI inventory (NIST AI RMF GOVERN 1.6), but not how
+  to tell whether it is true. AI-BOM formats (the SPDX 3.0 AI profile,
+  CycloneDX ML-BOM) can list models and datasets. The components that most
+  often change an AI system's behaviour, however, are text files that
+  package-keyed inventories do not track. The **modified** class targets them:
+  same name, different content.
 
-  Use it at release, at deployment, and periodically in operation. Its value
-  is highest for the components that conventional software bills of
-  materials do not cover and that change most often in AI systems: prompt
-  templates, tool definitions, guardrail configurations, and pinned model and
-  dataset digests.
+  Use it at release, at deployment, and periodically in operation. Each class
+  calls for different follow-up:
+  - **modified**: review the change, then re-register;
+  - **vanished**: retire or restore the component;
+  - **phantom**: register and review it;
+  - **resurrected**: investigate why a retired component is back.
 
-  The five classes call for different follow-up:
-  - **modified**: content changed under a registered name, the AI
-    supply-chain substitution case. Review the change, then re-register.
-  - **vanished**: a registered component is no longer deployed. Retire it or
-    restore it.
-  - **phantom**: a deployed component was never registered. Register and
-    review it.
-  - **resurrected**: a retired component has reappeared. Investigate.
+  Matching is by exact name. Renames are never inferred, either by name
+  similarity or by equal hash, so an unrecorded rename appears as one vanished
+  plus one phantom.
 
-  Example: an agent's inventory lists a system prompt, two tool definitions
-  and a guardrail policy. The deployed artifact has an edited system prompt,
-  the two tools, an unregistered third tool, and no guardrail policy. The
-  counts are matched 2, modified 1, vanished 1, phantom 1, resurrected 0.
-  Precision is 2/4 and recall is 2/4.
+  Example. An agent's inventory lists active entries for a system prompt, two
+  tools and a guardrail policy, plus one retired tool. The deployed artifact
+  has an edited system prompt, the two tools, an unregistered third tool, the
+  retired tool, and no guardrail policy. The counts are matched 2, modified 1,
+  vanished 1, phantom 1, resurrected 1. Precision is 2/4 and recall is 2/5.
 
-  Grounding: this is a new measurement for AI-system inventories. Its primary
-  methodological specification is the README of the linked worked example.
-  The underlying measurement is identity-keyed precision and recall of a
-  claimed component list against observed ground truth, as used to evaluate
-  software bills of materials (Balliu et al., 2023; Yu et al., 2024). This
-  method's extensions are the AI-specific component scope, matching on
-  content hash as well as name, and the separately reported classes.
+  Grounding: this is a newly proposed method, not yet adopted elsewhere. The
+  applied_definition is its specification, and the linked worked example is
+  its reference implementation. The underlying measurement is precision and
+  recall of a claimed component list against observed ground truth, keyed on
+  identity. Balliu et al. (2023) define precision as "the share of
+  dependencies in the SBOM that are correct with respect to the ground truth",
+  with dependencies "identical if their name and version match precisely". A
+  version mismatch therefore counts against both ratios, as **modified** does
+  here. Yu et al. (2024) apply the same comparison between "the reported
+  libraries and the ones actually installed". Both evaluate SBOM generators.
+  This method moves the measurement to an organisation's own AI inventory,
+  extends identity to content hashes of unversioned AI artifacts, and reports
+  the classes separately.
 
 known_failure_modes: |
-  1. The scan defines ground truth. Components the scanner cannot see
-     (loaded at run time, fetched from a remote registry, built in memory)
-     count as neither present nor phantom. Scanner coverage needs its own
-     review and must be stated with the result.
-  2. Identity conventions matter. Inconsistent naming between inventory and
-     scan inflates vanished and phantom together. A recorded rename avoids
-     this; an unrecorded one is deliberately not guessed.
-  3. The hash covers only what is hashed. A model referenced by name and tag
-     rather than by digest can change without becoming "modified".
-     Reference models and datasets by content digest.
-  4. Point in time. Fidelity describes the artifact scanned. A different
+  1. An inventory generated from the scan measures nothing. If the inventory
+     is produced from the same scan, or by the same deploy step, it scores
+     100% by construction. The inventory must be maintained independently of
+     the artifact it is checked against.
+  2. The scan defines ground truth. Components the scanner cannot see (loaded
+     at run time, fetched from a remote registry, built in memory) are in no
+     class. Report the list of artifact locations scanned with every result.
+  3. Canonical form decides "modified". If registration and scan normalise
+     content differently (line endings, JSON key order), unchanged components
+     read as modified. Declare the canonical form per component type and use
+     one routine for both.
+  4. Digests, not tags. A model or dataset referenced by name and tag can
+     change without becoming modified. Such references are reported as
+     errors rather than matched.
+  5. Point in time. Fidelity describes the artifact scanned. A different
      environment (staging versus production) needs its own scan.
-  5. Fidelity is not quality. A perfectly accurate inventory of an unsafe
+  6. Fidelity is not quality. A perfectly accurate inventory of an unsafe
      system scores 100%.
 
 references:
@@ -121,7 +125,7 @@ references:
     Networks (DSN 2024), 29-36. https://doi.org/10.1109/DSN58291.2024.00018
 
 implementation_resources:
-  - "TODO: worked example in mcp-mayhem (structuredJsonValidator), pinned to the release tag"
+  - "TODO: worked example in mcp-mayhem, pinned to the release tag"
 
 computational_requirements: >-
   CPU only, negligible cost. Hashing cost scales with artifact size; no model
