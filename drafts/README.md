@@ -25,3 +25,12 @@ This folder lives on the `drafts` branch of Tim's fork.
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
 | `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references verified; implementation pushed at mcp-mayhem 8207aa5 and verified; YAML next |
 | (none) | new: NL-to-formal claim faithfulness | idea only |
+| (none) | new: claim coverage (Tim, 2026-10-09). Of the claims a project publishes (model card, system card, assurance case), the fraction bound to a gate that checks them. It is the link upstream of evidence currency | idea only. Needs a prior-art check (requirements traceability, assurance cases / GSN) and code that computes it |
+
+## Framing (Tim, 2026-10-09)
+CI gates are the proof that what we claim is what we do. The chain:
+1. claims, bound to gates (claim coverage, idea);
+2. gates that are shown to work, i.e. have been seen to fail on a control (the #19 comment);
+3. evidence that is still current for the bytes shipped (evidence currency).
+
+Lead with the AI-accountability version: "are your published claims (model and system cards, assurance cases) still backed by evidence about what you are releasing?"
