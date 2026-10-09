@@ -25,6 +25,7 @@ This folder lives on the `drafts` branch of Tim's fork.
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
 | `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references verified; implementation pushed at mcp-mayhem 8207aa5 and verified; YAML next |
 | (none) | new: NL-to-formal claim faithfulness | idea only |
+| (none) | new: verified agent containment (Tim, 2026-10-09). Of the restrictions claimed for an AI agent, the fraction demonstrated by an executed negative test (attempt refused, work shown intact) rather than merely configured. Audit completeness includes clean passes and refusals | idea; most AI-native candidate. gitRobot: capability removal, absence asserted by test (tests/test_tier3_and_absent_controls.py), every call logged including passes, layered-soundness table. Overlap to check: catalogue "Agent / Tool Abuse Testing", #20, #16, #8/#15/#17 |
 | (none) | new: inventory fidelity (Tim, 2026-10-09). Reconcile a registry of the exact objects against a scan of the real artifact; report phantoms (present, not registered) and vanished (registered, not present) separately | idea. SJV `reconcile` does this for Lean declarations (structuredJsonValidator/consumers/lean/operations.py:264); an AI version needs a scanner for AI objects, references and an overlap check |
 | (none) | new: claim coverage (Tim, 2026-10-09). Of the claims a project publishes (model card, system card, assurance case), the fraction bound to a gate that checks them. It is the link upstream of evidence currency | idea only. Needs a prior-art check (requirements traceability, assurance cases / GSN) and code that computes it |
 
@@ -32,7 +33,7 @@ This folder lives on the `drafts` branch of Tim's fork.
 CI gates are the proof that what we claim is what we do. The chain:
 0. an inventory of the exact objects, reconciled against reality (SSOT via SJV; inventory fidelity, idea). It supplies the denominator for everything below;
 1. claims, bound to gates (claim coverage, idea);
-2. gates that are shown to work, i.e. have been seen to fail on a control (the #19 comment);
+2. gates that are shown to work (seen to fail on a control: the #19 comment), shown to have run (audit log including clean passes) and that cannot be routed around by an agent (gitRobot capability removal: verified agent containment, idea);
 3. evidence that is still current for the bytes shipped (evidence currency).
 
 Lead with the AI-accountability version: "are your published claims (model and system cards, assurance cases) still backed by evidence about what you are releasing?"
