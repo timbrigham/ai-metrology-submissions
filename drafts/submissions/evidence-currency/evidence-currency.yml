@@ -77,8 +77,11 @@ usage_details: |
   is added. At release, the safety evaluation's currency is 3/5 (60%): one
   subject is stale (the edited prompt) and one was never examined (the new
   tool). Until the evaluation is re-run, the release's "evaluated for safety"
-  claim describes a system that is no longer the one being shipped. A
-  pass-only view of the same records reports 4 of 4 passing.
+  claim describes a system that is no longer the one being shipped. Counting
+  only the recorded results, all 4 of 4 are PASS. A coarser check ("were the
+  results recorded at an older commit than the release?") would flag the
+  release but not say which files moved or which were never examined. The
+  linked worked example runs exactly this scenario.
 
   The counts give the remedy directly: stale subjects need a re-run, and
   never-examined subjects need a first run. A team can require a currency per
@@ -104,20 +107,23 @@ known_failure_modes: |
      check depends on, those files appear in no state, and currency can read
      100% while relevant content was never examined. Scope declarations need
      their own review.
-  3. Checker changes are invisible unless declared. Only the bytes of files in
+  3. Checker changes count only if declared. Only the bytes of files in
      $S_s(r)$ decide current versus stale. If the check itself changes (a new
      evaluator version, a different threshold), earlier verdicts stay current
      unless the checker's own files are declared as dependencies of the step
-     (in the reference implementation, `switches`).
+     (in the reference implementation, `switches`, which every record for the
+     step must then cover).
   4. Content outside the tracked tree. Inputs the hash does not cover (model
      weights fetched at run time, remote APIs, environment variables, random
      seeds) can change without making any verdict stale. Datasets and weights
      stored as Git LFS or DVC pointer files are covered only to the extent the
      pointer's embedded content hash changes with them. That follows from the
      pointer format and is not exercised by the worked example.
-  5. Not a quality measure. 100% currency with every verdict a FAIL is
+  5. Matching is by path and content. A file renamed without changing its
+     bytes counts as never examined until a verdict names the new path.
+  6. Not a quality measure. 100% currency with every verdict a FAIL is
      possible. Read currency together with outcomes, never as a substitute.
-  6. The aggregate hides structure. A high total can mask one safety-relevant
+  7. The aggregate hides structure. A high total can mask one safety-relevant
      step at low currency. Report per-step values.
 
 references:
@@ -134,7 +140,7 @@ references:
 
 implementation_resources:
   - >-
-    https://github.com/timbrigham/mcp-mayhem/tree/8207aa5f08b66632b07f2d52130664a49daee05c/verdictLedger/examples/evidence-currency
+    https://github.com/timbrigham/mcp-mayhem/tree/6a8d0296919e7b3008c68a0bcaa09f87a2ba1b61/verdictLedger/examples/evidence-currency
 
 computational_requirements: >-
   CPU only, negligible cost. Python 3.11 or later and git 2.28 or later; no
