@@ -2,8 +2,8 @@
 
 Working folder for contributions to NIST's AI Metrology Center intake: https://github.com/usnistgov/ai-metrology-submissions. Everything here is a draft. Nothing is posted until Tim approves it, and Tim posts it himself.
 
-This folder lives on the local `drafts` branch of Tim's fork.
-- **Never push this branch.** The fork is public, so pushing would publish the drafts.
+This folder lives on the `drafts` branch of Tim's fork.
+- It is pushed to Tim's own fork, which is public but is not a submission. Nobody at NIST is notified unless a PR is opened.
 - **Never open a PR from this branch.** A submission PR must add exactly one YAML file under `submissions/`.
 - To submit, cut a fresh branch from `main` (for example `git switch -c submit/<name> main`), copy the one YAML into `submissions/`, and push only that branch.
 
