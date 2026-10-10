@@ -25,7 +25,7 @@ This folder lives on the `drafts` branch of Tim's fork.
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
 | `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references verified; implementation pushed at mcp-mayhem 8207aa5 and verified; YAML next |
 | (none) | new: NL-to-formal claim faithfulness | idea only |
-| (none) | new: verified agent containment (Tim, 2026-10-09). Of the restrictions claimed for an AI agent, the fraction demonstrated by an executed negative test (attempt refused, work shown intact) rather than merely configured. Audit completeness includes clean passes and refusals | overlap ADJACENT (catalogue 'Agent / Tool Abuse Testing', #20, #16), refs verified (Martin & Xie WWW'07; El Kateb AST'13); needs YAML + example. Most AI-native candidate. gitRobot: capability removal, absence asserted by test (tests/test_tier3_and_absent_controls.py), every call logged including passes, layered-soundness table. Overlap to check: catalogue "Agent / Tool Abuse Testing", #20, #16, #8/#15/#17 |
+| `guard-coverage/` | was: verified agent containment (claimed-restriction verification). SUPERSEDED on 2026-10-10 by Incident-Driven Guard Coverage, see the status table | superseded / parked |
 | (none) | new: inventory fidelity (Tim, 2026-10-09). Reconcile a registry of the exact objects against a scan of the real artifact; report phantoms (present, not registered) and vanished (registered, not present) separately | overlap CLEAR/ADJACENT (#14), refs verified (Balliu IEEE S&P'23; Yu DSN'24), AI hook = AI RMF GOVERN 1.6; MUST add content-hash identity; needs YAML + example. SJV `reconcile` does this for Lean declarations (structuredJsonValidator/consumers/lean/operations.py:264); an AI version needs a scanner for AI objects, references and an overlap check |
 | (none) | new: claim coverage (Tim, 2026-10-09). Of the claims a project publishes (model card, system card, assurance case), the fraction bound to a gate that checks them. It is the link upstream of evidence currency | idea only. Needs a prior-art check (requirements traceability, assurance cases / GSN) and code that computes it |
 
@@ -33,7 +33,7 @@ This folder lives on the `drafts` branch of Tim's fork.
 CI gates are the proof that what we claim is what we do. The chain:
 0. an inventory of the exact objects, reconciled against reality (SSOT via SJV; inventory fidelity, idea). It supplies the denominator for everything below;
 1. claims, bound to gates (claim coverage, idea);
-2. gates that are shown to work (seen to fail on a control: the #19 comment), shown to have run (audit log including clean passes) and that cannot be routed around by an agent (gitRobot capability removal: verified agent containment, idea);
+2. gates that are shown to work (seen to fail on a control: the #19 comment), shown to have run (audit log including clean passes) and that cannot be routed around by an agent (gitRobot capability removal: Incident-Driven Guard Coverage, parked);
 3. evidence that is still current for the bytes shipped (evidence currency).
 
 Lead with the AI-accountability version: "are your published claims (model and system cards, assurance cases) still backed by evidence about what you are releasing?"
@@ -42,6 +42,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 - Submitter: `Tim Brigham (independent researcher)`. 6 of 13 open PRs are by independents, so there is precedent.
 - Contact: `timbrigham@gmail.com` (changed 2026-10-09: the zeroparadox.org homepage reads 'A machine-verified mathematical ontology', a triage trigger for NIST reviewers).
 - Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
+  - ⚠ OPEN (2026-10-10): the third candidate is now PARKED. Tim to decide: tag evidence currency + inventory fidelity on their own once NIST clarifies, or keep waiting.
 - Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
 
 ## NIST change on 2026-10-09: conciseness is now a criterion
@@ -59,7 +60,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 | Incident-Driven Guard Coverage (`guard-coverage/`, formerly agent containment) | PARKED: design v1 + refs verified; no YAML | not built | no |
 | Recurrence response / repeated-failure adaptation (`recurrence-response/`) | PARKED: design v2 + refs verified; no YAML | not built | no |
 
-Before the tag: the containment example, a joint final adversarial review of all three, NIST's clarification, and a maturity note in each PR description. Then ONE tag, and re-pin all three links to it.
+Before the tag: Tim's decision on the open tagging question above, a joint final adversarial review, NIST's clarification, and a maturity note in each PR description. Then re-pin the links to the tag.
 
 ## Framing rules from Tim (2026-10-10), apply to every submission
 - **Proportionate threat model:** best effort against an agent that misbehaves but is not ill-intentioned. Covering the top few common patterns is enough. Never imply completeness; state the scope, e.g. the attempts listed.
@@ -68,4 +69,4 @@ Before the tag: the containment example, a joint final adversarial review of all
 ## 2026-10-10 update
 - mcp-mayhem 78dd222: scope statement added to the root README and both example READMEs. Verified here from a clean export, and both examples' numbers are unchanged.
 - Tim approved the source-comment tone pass in verdictLedger/core. It is mcp-mayhem-48's work.
-- Containment (Part B) is NOT currently being built in mcp-mayhem-48. Waiting on Tim for how to proceed.
+- Containment (Part B) is NOT being built. It was reframed, renamed Incident-Driven Guard Coverage, and PARKED.
