@@ -50,3 +50,12 @@ Lead with the AI-accountability version: "are your published claims (model and s
   - Our #19 comment is ON HOLD. The PR is effectively rejected, so evidence there now has little value.
   - All three YAMLs need a conciseness pass. #19 was about 540 words when rejected.
   - WAIT for NIST's promised clarification before submitting anything. This fits the one-tag plan.
+
+## Status at 2026-10-09 (end of day)
+| submission | YAML | example | verified by metrology |
+|---|---|---|---|
+| evidence currency | trimmed, final fact-check passed | verdictLedger @ 6a8d029 | yes (clean export) |
+| AI inventory fidelity | rev 3, aligned to code | inventoryFidelity @ 77c6d09 | yes (clean export: exact numbers, 86 tests, stdlib only) |
+| claimed-restriction verification | rev 3 (concise) | being REBUILT by mcp-mayhem-48 (the first harness attempted 1 of 25 tools) | no |
+
+Before the tag: the containment example, a joint final adversarial review of all three, NIST's clarification, and a maturity note in each PR description. Then ONE tag, and re-pin all three links to it.
