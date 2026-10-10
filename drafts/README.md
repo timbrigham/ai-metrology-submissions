@@ -72,3 +72,19 @@ Before the tag: Tim's decision on the open tagging question above, a joint final
 - Containment (Part B) is NOT being built. It was reframed, renamed Incident-Driven Guard Coverage, and PARKED.
 - gitRobot `-n` false refusal: confirmed by mcp-mayhem-48 (also 8). Tim approved the narrow fix: `-n` for log/grep, `--git-dir` for rev-parse, and grep added to the read allow-list. It does not touch either submission's code.
 - Classification-rule sensitivity, demonstrated: the same log gave 62 keys / 43 singletons under metrology's normalisation and 44 / 26 under mcp-mayhem-48's.
+
+## Framing: security operations applied to AI agents (Tim, 2026-10-10)
+Tim: "This is honestly turning into a cyber security concept... Effectively this is auditing and responding to an audit log."
+| security practice | our piece |
+|---|---|
+| audit logging | gitRobot git_ops, MCP http_calls, session transcripts |
+| log integrity / retention | verdictLedger tamper detection; retention audit (Claude Code `cleanupPeriodDays` raised from 30 to 365 on 2026-10-10) |
+| detection | guards and hooks that refuse risky actions |
+| incident response / post-mortem | incident becomes guard plus regression test (the `+branch` force-push) |
+| detection coverage, time to remediate | Incident-Driven Guard Coverage (parked) |
+| false-positive rate | the `-n` and `grep` false refusals |
+| control validation | "a gate never seen to fail is a hypothesis"; the #19 paired-control comment |
+| asset inventory | AI Inventory Fidelity |
+| audit-evidence freshness | Evidence Currency |
+The log-hygiene findings from the 2026-10-10 audit are classic audit-log issues: rotation erasing history, no session id, test traffic in production, incidents only as prose.
+Possible use: one line in the PR descriptions, and the organising idea if the parked candidates are revived. It also fits the best-effort stance: security operations measures detection and response, never "stops everything".
