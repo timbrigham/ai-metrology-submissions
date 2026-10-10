@@ -10,11 +10,12 @@ applied_definition: |
   inventory.
 
   The inventory $I$ maps each active name to a content hash and lists retired
-  names. An inventory with a name both active and retired, or a duplicate
-  active name, is invalid and is not measured. The scan yields $P$, mapping
-  each present name to a hash. A scanned name that is duplicated, unnamed, or
-  a reference with no content digest is reported as an error and withheld from
-  classification on both sides. Hashes are SHA-256 over one canonical form,
+  names. An inventory that is malformed (for example a name both active and
+  retired, or a duplicate name) is invalid and is not measured. The scan yields $P$, mapping
+  each present name to a hash. A scanned item that is duplicated, unreadable,
+  not valid in its canonical form, or a reference with no content digest is
+  reported as an error, and its name is withheld from classification on both
+  sides. Hashes are SHA-256 over one canonical form,
   used at both registration and scan:
   - text (prompts, YAML configs): UTF-8, one leading BOM removed, CRLF and
     CR rewritten to LF;
@@ -58,43 +59,35 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  Much of an AI system's behaviour is set by unversioned text (system prompts,
-  tool schemas, guardrail policies) that sits outside package managers. AI-BOM
-  formats (the SPDX 3.0 AI profile, CycloneDX ML-BOM) can list models and
-  datasets, but not whether the registered content of these files is what is
-  running. Governance asks for an AI inventory (NIST AI RMF GOVERN 1.6) but not
-  how to check that it is true. The **modified** class targets that gap.
+  System prompts, tool schemas and guardrail policies shape an AI system's
+  behaviour but are not tracked by package managers. AI-BOM formats (the SPDX
+  3.0 AI profile, CycloneDX ML-BOM) record what a system is said to contain;
+  this method checks such a record, down to file content, against what is
+  deployed. NIST AI RMF GOVERN 1.6 calls for mechanisms to inventory AI
+  systems; this is one way to test whether an inventory is accurate.
 
-  Use it at release, deployment and periodically in operation. Follow-up for
-  each class:
-  - modified: review, then re-register;
-  - vanished: retire or restore;
-  - phantom: register and review;
-  - resurrected: investigate.
-  Matching is by exact name. Renames are never inferred, so an unrecorded
-  rename appears as one vanished plus one phantom.
+  Use it at release, at deployment and periodically in operation. Follow-up:
+  modified, review then re-register; vanished, retire or restore; phantom,
+  register and review; resurrected, investigate. Renames are never inferred:
+  an unrecorded rename is one vanished plus one phantom.
 
   Example. An inventory lists a system prompt, two tools and a guardrail
   policy, plus one retired tool. The deployment has an edited prompt, the two
   tools, an unregistered third tool, the retired tool, and no guardrail
-  policy. The counts are: matched 2, modified 1, vanished 1, phantom 1,
-  resurrected 1. Precision is 2/4 and recall is 2/5.
+  policy. Counts: matched 2, modified 1, vanished 1, phantom 1, resurrected 1.
+  Precision is 2/4 and recall is 2/5.
 
-  Grounding: this is a newly proposed method, not adopted elsewhere. The
-  applied_definition is the specification, and the linked example is a
-  reference implementation. The underlying measurement is identity-keyed
-  precision and recall of a claimed component list against ground truth.
-  Balliu et al. (2023) define precision as "the share of dependencies in the
-  SBOM that are correct with respect to the ground truth", with dependencies
-  "identical if their name and version match precisely". So a version
-  mismatch counts against both ratios, as **modified** does here. Yu et al.
-  (2024) compare "the reported libraries and the ones actually installed".
-  This method applies that measurement to an organisation's own AI inventory,
-  with content hashes for unversioned AI artifacts.
-  The reference implementation is a single-author proof of concept, built
-  for and used in one dedicated environment. It demonstrates the measurement;
-  it is not a production or complete tool, and it has not been independently
-  replicated or adopted elsewhere.
+  Grounding: a newly proposed method, specified by the applied_definition
+  above. The underlying measurement is precision and recall of a claimed
+  component list against ground truth. Balliu et al. (2023) define precision
+  as "the share of dependencies in the SBOM that are correct with respect to
+  the ground truth", with dependencies "identical if their name and version
+  match precisely"; a version mismatch thus counts against both ratios, as
+  **modified** does here. Yu et al. (2024) compare "the reported libraries and
+  the ones actually installed". This method applies that measurement to an AI
+  inventory, using content hashes where artifacts carry no version. The
+  implementation is a single-author proof of concept used in one environment;
+  it is not production-ready and has not been independently replicated.
 
 known_failure_modes: |
   1. An inventory generated from the scan, or by the same deploy step, scores
@@ -129,7 +122,7 @@ implementation_resources:
     https://github.com/timbrigham/mcp-mayhem/tree/77c6d094cbde1cd4b47cc7780d944d660746ff43/inventoryFidelity/examples/inventory-fidelity
 
 computational_requirements: >-
-  CPU only, negligible cost. Hashing cost scales with artifact size; no model
-  and no GPU.
+  CPU only, negligible cost. Python 3.11 or later, standard library only; git
+  not needed. Hashing cost scales with artifact size.
 
 usage_rights: Implementation is open source under the MIT License.

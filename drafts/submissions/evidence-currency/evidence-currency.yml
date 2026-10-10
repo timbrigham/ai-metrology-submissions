@@ -62,49 +62,42 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  Use it at a release or deployment decision, to check whether the evaluations
-  a release cites (in a model or system card, an assurance case or a release
-  checklist) were run against the exact files being shipped.
+  Use it at a release or deployment decision, to check that the evaluations a
+  release cites (in a model card, assurance case or release checklist) were run
+  on the exact files shipped.
 
-  Example. A safety evaluation passed over `prompts/system.md`,
-  `guardrails/policy.yaml`, `tools/search.json` and `evals/safety_set.jsonl`.
-  The system prompt is then edited and a tool, `tools/browse.json`, is added.
-  At release, currency is 3/5 (60%): one file stale, one never examined, while
-  the recorded results still read 4 of 4 PASS. Stale files need a re-run, and
-  never-examined files need a first run. A per-commit check would flag the
-  release but not say which files. The linked worked example runs this
-  scenario. A team can set a per-step threshold (e.g. 100% for a safety
-  evaluation) without changing what is measured.
+  Example. A safety evaluation passed over a system prompt, a guardrail policy,
+  a tool definition and an evaluation set. The prompt is then edited and a
+  second tool added. At release, currency is 3/5 (60%): one file stale (re-run
+  needed), one never examined (first run needed), while the recorded results
+  still read 4 of 4 PASS. The linked example runs this scenario. A per-step
+  threshold (e.g. 100% for a safety evaluation) can be set without changing
+  what is measured.
 
-  Grounding: this is a new measurement. Its primary specification is the
-  README of the worked example in the linked implementation, and no
-  peer-reviewed source we know of defines it.
-  - Its validity rule (a recorded result holds only while the hashes of its
-    inputs are unchanged) is the one used in regression test selection
-    (Gligoric et al., 2015).
-  - Its per-step check of recorded evidence against the hashes of the
-    delivered artifacts follows in-toto (Torres-Arias et al., 2019).
-  The reference implementation is a single-author proof of concept, built
-  for and used in one dedicated environment. It demonstrates the measurement;
-  it is not a production or complete tool, and it has not been independently
-  replicated or adopted elsewhere.
+  Grounding: a newly proposed measurement, specified by the applied_definition
+  above; the submitter knows of no peer-reviewed source that defines it. Its
+  validity rule (a result holds only while its inputs' hashes are unchanged) is
+  the one used in regression test selection (Gligoric et al., 2015). Its
+  per-step check of recorded evidence against the hashes of delivered artifacts
+  follows in-toto (Torres-Arias et al., 2019). The implementation is a
+  single-author proof of concept used in one environment; it is not
+  production-ready and has not been independently replicated.
 
 known_failure_modes: |
   1. Records are not re-run. A fabricated or mistaken record counts as
      current; the metric is only as trustworthy as whatever writes records.
   2. Scope sets the denominator. Files a check depends on but its scope omits
-     appear in no state, so currency can read 100% while they were never
+     are in no state, so currency can read 100% while they were never
      examined. Scope declarations need their own review.
-  3. Checker changes count only if declared. A new evaluator version or
-     threshold leaves earlier verdicts current unless the checker's files are
-     declared as dependencies of the step (`switches` in the implementation).
-  4. Untracked inputs. Weights fetched at run time, remote APIs, environment
-     variables and seeds can change without making any verdict stale.
-  5. Renames. A file renamed without changing its bytes counts as never
-     examined until a verdict names the new path.
-  6. Not a quality measure. Currency can be 100% with every verdict a FAIL.
-     Read it together with outcomes, and per step, since a high total can
-     hide one safety-relevant step at low currency.
+  3. Checker changes (a new evaluator version or threshold) leave earlier
+     verdicts current unless the checker's files are declared as dependencies
+     of the step (`switches`).
+  4. Untracked inputs (weights fetched at run time, remote APIs, environment
+     variables, seeds) can change without making any verdict stale.
+  5. A file renamed with unchanged bytes counts as never examined until a
+     verdict names the new path.
+  6. Not a quality measure: currency can be 100% with every verdict a FAIL.
+     Read it per step and alongside outcomes.
 
 references:
   - >-
@@ -123,9 +116,8 @@ implementation_resources:
     https://github.com/timbrigham/mcp-mayhem/tree/6a8d0296919e7b3008c68a0bcaa09f87a2ba1b61/verdictLedger/examples/evidence-currency
 
 computational_requirements: >-
-  CPU only, negligible cost. Python 3.11 or later and git 2.28 or later; no
-  third-party Python packages. Needs a full checkout of the linked repository,
-  because the implementation imports a shared module that sits beside it. The
-  worked example runs in a few seconds.
+  CPU only, negligible cost. Python 3.11+ and git 2.28+, standard library only,
+  run from a full checkout of the linked repository. The example runs in
+  seconds.
 
 usage_rights: Implementation is open source under the MIT License.
