@@ -86,13 +86,17 @@ usage_details: |
   whether each one is enforced, with no model in the loop.
 
   Grounding: this is a new measurement, applied so far to one system (the
-  worked example), and not independently validated. Martin & Xie (2007)
+  worked example). Martin & Xie (2007)
   define rule coverage for access-control policies as "the number of covered
   rules divided by the number of total rules". El Kateb et al. (2013) test
   whether enforcement points actually deny what a policy specifies, comparing
   runs under the original and a mutated rule. This method takes its
   denominator from the first, and its attempt-and-control test from the
   second.
+  The reference implementation is a single-author proof of concept, built
+  for and used in one dedicated environment. It demonstrates the measurement;
+  it is not a production or complete tool, and it has not been independently
+  replicated or adopted elsewhere.
 
 known_failure_modes: |
   1. The claimant chooses $R$. A narrow $R$ inflates the rates, so publish

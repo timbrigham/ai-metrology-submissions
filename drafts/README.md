@@ -59,3 +59,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 | claimed-restriction verification | rev 3 (concise) | being REBUILT by mcp-mayhem-48 (the first harness attempted 1 of 25 tools) | no |
 
 Before the tag: the containment example, a joint final adversarial review of all three, NIST's clarification, and a maturity note in each PR description. Then ONE tag, and re-pin all three links to it.
+
+## Framing rules from Tim (2026-10-10), apply to every submission
+- **Proportionate threat model:** best effort against an agent that misbehaves but is not ill-intentioned. Covering the top few common patterns is enough. Never imply completeness; state the scope, e.g. the attempts listed.
+- **Proof of concept:** the reference implementations are single-author proofs of concept built for one dedicated environment, not production or complete tools. The metrics can be general, but the implementations' scope must be stated plainly. All three YAMLs carry the same sentence.

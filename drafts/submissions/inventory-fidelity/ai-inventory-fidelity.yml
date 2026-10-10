@@ -91,6 +91,10 @@ usage_details: |
   (2024) compare "the reported libraries and the ones actually installed".
   This method applies that measurement to an organisation's own AI inventory,
   with content hashes for unversioned AI artifacts.
+  The reference implementation is a single-author proof of concept, built
+  for and used in one dedicated environment. It demonstrates the measurement;
+  it is not a production or complete tool, and it has not been independently
+  replicated or adopted elsewhere.
 
 known_failure_modes: |
   1. An inventory generated from the scan, or by the same deploy step, scores

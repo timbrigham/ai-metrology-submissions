@@ -84,9 +84,10 @@ usage_details: |
     (Gligoric et al., 2015).
   - Its per-step check of recorded evidence against the hashes of the
     delivered artifacts follows in-toto (Torres-Arias et al., 2019).
-  The implementation is a recent, single-author research prototype, not a
-  packaged library, and has not been independently replicated or adopted
-  elsewhere.
+  The reference implementation is a single-author proof of concept, built
+  for and used in one dedicated environment. It demonstrates the measurement;
+  it is not a production or complete tool, and it has not been independently
+  replicated or adopted elsewhere.
 
 known_failure_modes: |
   1. Records are not re-run. A fabricated or mistaken record counts as
