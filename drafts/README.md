@@ -19,7 +19,9 @@ This folder lives on the `drafts` branch of Tim's fork.
 
 **Open external dependencies:**
 - NIST's promised clarification (hbooth on #19, 2026-10-09). None as of 2026-10-10. Tim declined a scheduled check, so look only when asked.
-- mcp-mayhem-48 is building instrumentation items 1 (session + surface), 2 (refusal_class) and 4 (SJV incident register), AFTER the tag. Item 3 was dropped. When the SHAs arrive, verify each is logging-only (no change to allow/refuse).
+- Instrumentation (after the tag; item 3 dropped):
+  - **Item 1 DONE and VERIFIED** at mcp-mayhem abdb679 (2026-10-10): `surface` (mcp | cli | internal) + `session` on every git_ops row, always present and null when unknown. Logging-only (tiers.py untouched; thread targets wrapped with a context copy); 545/545 gitRobot tests at a clean export; live log confirmed (first row: reaper, surface=internal). ⚠ Rows before abdb679 lack both keys: absent means "before the field existed", NOT unknown.
+  - Items 2 (refusal_class) and 4 (SJV incident register): pending in mcp-mayhem-48. Verify each is logging-only when its SHA arrives.
 
 **Submission procedure (Tim posts):** for each metric, cut a fresh branch from upstream `main`, copy that ONE YAML into `submissions/`, push it to the fork, and open the PR to usnistgov with that folder's `PR.md` as the body. Tim confirms the two checklist commitments (self-check, will follow the PR).
 
