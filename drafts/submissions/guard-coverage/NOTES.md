@@ -1,6 +1,8 @@
-# Candidate: verified agent containment (working name)
+# Candidate: Incident-Driven Guard Coverage (renamed 2026-10-10; formerly "verified agent containment")
 
-> ⚠ SUPERSEDED on 2026-10-10 by Tim's reframe, below. `claimed-restriction-verification-rate.yml` is kept for history only and must not be submitted.
+> **PARKED (2026-10-10).** Design v1 and the references are done. It needs an example built in mcp-mayhem (a read-only tool over gitRobot's audit log plus an incident record) before a YAML is worth writing.
+
+> ⚠ SUPERSEDED on 2026-10-10 by Tim's reframe, below. `SUPERSEDED-claimed-restriction-verification-rate.yml` is kept for history only and must not be submitted.
 
 **Status:** idea. Implementation read on 2026-10-09. Overlap and reference check running.
 

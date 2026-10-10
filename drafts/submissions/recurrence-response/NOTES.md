@@ -1,6 +1,6 @@
 # Candidate: recurrence response (Tim chose this on 2026-10-10)
 
-**Status:** idea. Overlap and reference research is running.
+**Status:** PARKED (2026-10-10). Design v2 and the references are done. It needs an example (a script over public agent trajectories, with a declared taxonomy and blind labelling) before a YAML is worth writing.
 
 ## The idea (Tim)
 A good AI engine should have rules that challenge the SHAPE of how it is measuring or working when the same failure recurs, rather than patching harder. ZeroParadox already does this:

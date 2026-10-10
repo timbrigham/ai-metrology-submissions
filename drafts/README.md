@@ -56,7 +56,8 @@ Lead with the AI-accountability version: "are your published claims (model and s
 |---|---|---|---|
 | evidence currency | trimmed, final fact-check passed | verdictLedger @ 6a8d029 | yes (clean export) |
 | AI inventory fidelity | rev 3, aligned to code | inventoryFidelity @ 77c6d09 | yes (clean export: exact numbers, 86 tests, stdlib only) |
-| agent containment | SUPERSEDED by Tim's 2026-10-10 reframe (ongoing guard-coverage over observed patterns) | not being built | no; proposed as a later, separate submission |
+| Incident-Driven Guard Coverage (`guard-coverage/`, formerly agent containment) | PARKED: design v1 + refs verified; no YAML | not built | no |
+| Recurrence response / repeated-failure adaptation (`recurrence-response/`) | PARKED: design v2 + refs verified; no YAML | not built | no |
 
 Before the tag: the containment example, a joint final adversarial review of all three, NIST's clarification, and a maturity note in each PR description. Then ONE tag, and re-pin all three links to it.
 
