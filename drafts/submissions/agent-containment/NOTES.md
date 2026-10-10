@@ -117,3 +117,35 @@ Caveats: it sees only attempts made through the tools, "distinct pattern" needs 
   - Good, I. J. (1953), "The population frequencies of species and the estimation of population parameters", Biometrika;
   - Böhme, M. (2018), "STADS: Software Testing as Species Discovery", ACM TOSEM.
 - Recommended to Tim: split containment off as a later, separate submission with its own tag. Pending his decision.
+
+## Working definition draft v0 (metrology, 2026-10-10). Pending the research agent, NOT yet a YAML
+**Observation.** An event $e$ = (time, session, tool, operation, arguments, outcome) that is one of:
+- (i) an **incident**: an operation the tool ALLOWED that review later judged harmful (e.g. the `+branch` force-push);
+- (ii) a **risky refusal**: a refused attempt at an action the guard exists to stop (e.g. `reset --hard`, the `-n` repo redirect, `stage -A`).
+
+Excluded and reported separately:
+- gate failures and operational conflicts;
+- **benign refusals** (harmless actions blocked), which feed the false-refusal companion;
+- test probes, identified by actor or run id.
+
+**Pattern.** A declared, versioned classification function $\kappa(e)$ maps each observation to a pattern id, e.g. (tool, operation, normalised risky feature of the arguments). Changing $\kappa$ requires recomputing history; the version is reported.
+
+**At time $T$:**
+- $K(T)$: the distinct patterns observed so far.
+- $G(T) \subseteq K(T)$: patterns that have (a) a guard that refuses them, and (b) a regression test at revision $T$ that replays the original observation through the entry point the agent uses, asserts the refusal, and passes.
+- **Coverage** $= |G(T)|/|K(T)|$, reported with both counts. Undefined if $K(T) = \emptyset$.
+- **Time to guard**, per pattern: from its first observation to the first revision where it is in $G$. Report the median over guarded patterns and the age of each pattern still unguarded.
+- **Discovery trend:** new patterns per window (per $N$ agent sessions, or per week), with the cumulative curve.
+- **Residual estimate:** $f_1/n$, where $f_1$ is the number of patterns observed exactly once and $n$ the number of observations. This is the Good-Turing estimate of the probability that the next observation is a new pattern. Report it ONLY when $n \ge n_{min}$ (threshold to be set from the literature), always with $f_1$ and $n$ shown.
+- **Companion, false-refusal rate:** benign refusals / all refusals in the window.
+
+**Known validity issues to state:**
+- Refusals are already-guarded patterns, so discovery comes from incidents, and incidents are rare. The estimate may never reach $n_{min}$ for a small deployment, and the method must say so rather than report it.
+- It only sees what happens through the tools.
+- $\kappa$ decides everything: too fine inflates $f_1$, too coarse hides variants.
+- It assumes the agent population and tasks are roughly stationary within a window.
+
+**Existing evidence of the loop**, each observed, then guarded and tested:
+- the `+branch` force-push (77c6d09);
+- `reset --hard` (gitRobot README);
+- ZeroParadox's .NET relative-path writes.
