@@ -5,21 +5,21 @@ name: AI Inventory Fidelity
 applied_definition: |
   Measures whether an inventory of an AI system's components (prompt templates,
   tool definitions, guardrail and policy configurations, and model and dataset
-  references by digest) describes what is actually deployed. It reconciles the
-  inventory against independent observations of the deployment, without
-  modifying the inventory. No single source, the inventory included, is
-  treated as ground truth.
+  references by digest) describes what is actually deployed, by reconciling
+  it, unmodified, against an observation of the deployment.
 
   The inventory $I$ maps each active name to a content hash and lists retired
-  names. An inventory that is malformed (for example a name both active and
-  retired, or a duplicate name) is invalid and is not measured. Each
-  observation source (for example a deployment manifest, a runtime listing, a
-  file scan) yields $P$, mapping each present name to a hash; the
-  reconciliation is run once per source. A scanned item that is duplicated, unreadable,
+  names; a malformed inventory (a name both active and retired, or
+  duplicated) is not measured. An observation source (a file scan of the
+  deployed artifact, or any listing that carries content digests) yields $P$,
+  mapping each present name to a hash. Each run reconciles $I$ against one
+  source, the reference for that run only: no single source, the inventory
+  included, is assumed complete or correct. An observed item that is
+  duplicated, unreadable,
   not valid in its canonical form, or a reference with no content digest is
   reported as an error, and its name is withheld from classification on both
   sides. Hashes are SHA-256 over one canonical form,
-  used at both registration and scan:
+  used at both registration and observation:
   - text (prompts, YAML configs): UTF-8, one leading BOM removed, CRLF and
     CR rewritten to LF;
   - JSON: re-serialised with sorted keys, no insignificant whitespace, and
@@ -42,8 +42,7 @@ applied_definition: |
 
   Either ratio is undefined when its denominator is 0. The five counts and the
   names in every non-matched class are always reported with the ratios, per
-  source. Where several sources are reconciled, components whose class
-  differs between sources are reported as disagreements.
+  source.
 
 submitter_organizations:
   - Tim Brigham (independent researcher)
@@ -71,10 +70,10 @@ usage_details: |
   deployed. NIST AI RMF GOVERN 1.6 calls for mechanisms to inventory AI
   systems; this is one way to test whether an inventory is accurate.
 
-  In practice no single record of what is deployed is trustworthy on its
-  own; inventory accuracy is established by continuous reconciliation
-  against several independent observations. Use it at every deployment and
-  on a schedule in operation, and track the trend. Follow-up:
+  Run it against each independent source available, at every deployment
+  and on a schedule in operation, and track the trend. A component classed
+  differently by two sources means one source is wrong: investigate it.
+  Follow-up:
   modified, review then re-register; vanished, retire or restore; phantom,
   register and review; resurrected, investigate. Renames are never inferred:
   an unrecorded rename is one vanished plus one phantom.
@@ -85,8 +84,8 @@ usage_details: |
   policy. Counts: matched 2, modified 1, vanished 1, phantom 1, resurrected 1.
   Precision is 2/4 and recall is 2/5.
 
-  Grounding: a newly proposed method, specified by the applied_definition
-  above. The underlying measurement is precision and recall of a claimed
+  Grounding: a newly proposed method. The underlying measurement is
+  precision and recall of a claimed
   component list against ground truth. Balliu et al. (2023) define precision
   as "the share of dependencies in the SBOM that are correct with respect to
   the ground truth", with dependencies "identical if their name and version
@@ -100,20 +99,18 @@ usage_details: |
 known_failure_modes: |
   1. An inventory generated from the scan, or by the same deploy step, scores
      100% by construction. It must be maintained independently.
-  2. A single source is itself untrusted. Components a source cannot see
-     (loaded at run time, fetched remotely, outside its layout) are in no
-     class. Reconcile against several independent sources where they exist,
-     report where they disagree, and list what each source covered. The
-     reference implementation reconciles one file-layout scan per run.
-  3. If registration and scan normalise content differently (line endings,
-     JSON key order), unchanged components read as modified. Use one
-     canonicalisation routine for both.
-  4. A model referenced by tag rather than digest can change silently. Such
-     references are errors, not matches.
-  5. A result is a snapshot. Inventories drift, so run it continuously (at
-     each deployment and on a schedule), per environment, and track the
-     trend.
-  6. Fidelity is not quality. An accurate inventory of an unsafe system
+  2. Each source is itself untrusted, and components it cannot see (loaded
+     at run time, fetched remotely, outside its layout) are in no class. List
+     what each source covered. Sources must be independent: sources derived
+     from one another (a CMDB fed by the same deploy pipeline as the
+     manifest) count as one. The reference implementation observes one
+     source type: a file scan of a fixed layout (prompts/, tools/,
+     guardrails/, models.json).
+  3. If registration and observation normalise content differently,
+     unchanged components read as modified. Use one canonicalisation routine
+     for both.
+  4. A result is a snapshot of one environment at one time.
+  5. Fidelity is not quality. An accurate inventory of an unsafe system
      scores 100%.
 
 references:
@@ -133,7 +130,7 @@ implementation_resources:
     https://github.com/timbrigham/mcp-mayhem/tree/77c6d094cbde1cd4b47cc7780d944d660746ff43/inventoryFidelity/examples/inventory-fidelity
 
 computational_requirements: >-
-  CPU only, negligible cost. Python 3.11 or later, standard library only; git
-  not needed. Hashing cost scales with artifact size.
+  CPU only, negligible cost. Python 3.11 or later, standard library only.
+  Hashing cost scales with artifact size.
 
 usage_rights: Implementation is open source under the MIT License.
