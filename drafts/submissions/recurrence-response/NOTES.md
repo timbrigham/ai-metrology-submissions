@@ -66,3 +66,18 @@ The containment redesign of 2026-10-10 was this rule firing live.
 - **Data:** THIRD-PARTY public trajectories (SWE-agent trajectories, MAST-Data with 1,600+ traces, AgentBench) rather than ZeroParadox's private, curated DEFECTS.md. This fixes both "who chose the set" and the private-data problem.
 - **ZeroParadox's role:** an illustration of the "rules on" condition only (R-RECUR, R-NOCONV, R-LOOPCAP). Never validating evidence. A rules-on versus rules-off ablation would measure the rule's effect.
 - Loop-cap data (fix-introduced findings per round) stays a possible illustration of the effectiveness arm.
+
+## v2 change (Tim, 2026-10-10): "change of shape" is implementation-specific
+Tim: "change of shape" has to be "specific to the implementation ... specific to the line of thought being protected."
+
+So there is no universal closed taxonomy. The method requires each implementation to DECLARE its own approach taxonomy, and the YAML specifies the declaration rules, not the categories. Examples:
+- coding agent: retry same locus / different locus / change the test / gather information / escalate;
+- proof work: tactic tweak / restructure the lemma / change the statement / prove a helper;
+- prose claims (R-REVALIDATE's own list): redraft / measure the claim / restate as conjecture / delete.
+
+**Declaration rules:**
+- fixed BEFORE data is seen and published with the results;
+- each category marked as degree or kind for that domain;
+- labels assigned blind to the recurrence count, with agreement (kappa) reported.
+
+**Validity:** an implementer-declared taxonomy reopens "who chose the set". The EFFECTIVENESS ARM audits it. If "kind" changes do not reduce recurrence of the same signature more than "degree" changes, the declared taxonomy is not capturing shape, and the result must report that. The outcome validates the definition, so a taxonomy cannot be chosen to flatter the agent.
