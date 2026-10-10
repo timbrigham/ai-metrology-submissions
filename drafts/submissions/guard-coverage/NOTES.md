@@ -4,7 +4,7 @@
 
 > ⚠ SUPERSEDED on 2026-10-10 by Tim's reframe, below. `SUPERSEDED-claimed-restriction-verification-rate.yml` is kept for history only and must not be submitted.
 
-**Status:** idea. Implementation read on 2026-10-09. Overlap and reference check running.
+**Status (original, superseded):** idea, 2026-10-09. See the PARKED banner above.
 
 ## The metric (draft wording)
 - An AI agent acts through mediated tools, and the system claims a set R of restrictions on what the agent can do.
