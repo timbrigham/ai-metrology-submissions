@@ -30,4 +30,4 @@ AI Inventory Fidelity measures whether an organisation's inventory of an AI syst
 - **Relation to the catalogue and open submissions:**
   - I found no AI Metrology Center entry on inventory or bill-of-materials accuracy.
   - The nearest open submission is adverse-action traceability (#14), a qualitative, single-domain reconciliation of outputs to their declared sources.
-- **Context:** governance guidance asks for an AI inventory (AI RMF GOVERN 1.6), but not how to check that it is accurate. This applies the security practice of auditing an asset inventory to AI-specific components.
+- **Context:** in security operations, inventory accuracy is a well-known hard problem. The system of record cannot be trusted on its own, so practitioners establish what is really deployed by continuous reconciliation against many independent sources. Governance guidance asks for an AI inventory (AI RMF GOVERN 1.6), but not how to check that it is accurate. This applies that reconciliation practice to AI-specific components. It is verification in the TEVV sense: confirming that the deployed configuration is the one that was registered and evaluated.

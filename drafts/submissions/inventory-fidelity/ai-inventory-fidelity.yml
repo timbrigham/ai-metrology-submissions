@@ -6,13 +6,16 @@ applied_definition: |
   Measures whether an inventory of an AI system's components (prompt templates,
   tool definitions, guardrail and policy configurations, and model and dataset
   references by digest) describes what is actually deployed. It reconciles the
-  inventory against a scan of the deployed artifact, without modifying the
-  inventory.
+  inventory against independent observations of the deployment, without
+  modifying the inventory. No single source, the inventory included, is
+  treated as ground truth.
 
   The inventory $I$ maps each active name to a content hash and lists retired
   names. An inventory that is malformed (for example a name both active and
-  retired, or a duplicate name) is invalid and is not measured. The scan yields $P$, mapping
-  each present name to a hash. A scanned item that is duplicated, unreadable,
+  retired, or a duplicate name) is invalid and is not measured. Each
+  observation source (for example a deployment manifest, a runtime listing, a
+  file scan) yields $P$, mapping each present name to a hash; the
+  reconciliation is run once per source. A scanned item that is duplicated, unreadable,
   not valid in its canonical form, or a reference with no content digest is
   reported as an error, and its name is withheld from classification on both
   sides. Hashes are SHA-256 over one canonical form,
@@ -38,7 +41,9 @@ applied_definition: |
   $$\mathrm{precision} = \frac{m}{m+d+v}, \qquad \mathrm{recall} = \frac{m}{m+d+p+z}$$
 
   Either ratio is undefined when its denominator is 0. The five counts and the
-  names in every non-matched class are always reported with the ratios.
+  names in every non-matched class are always reported with the ratios, per
+  source. Where several sources are reconciled, components whose class
+  differs between sources are reported as disagreements.
 
 submitter_organizations:
   - Tim Brigham (independent researcher)
@@ -66,7 +71,10 @@ usage_details: |
   deployed. NIST AI RMF GOVERN 1.6 calls for mechanisms to inventory AI
   systems; this is one way to test whether an inventory is accurate.
 
-  Use it at release, at deployment and periodically in operation. Follow-up:
+  In practice no single record of what is deployed is trustworthy on its
+  own; inventory accuracy is established by continuous reconciliation
+  against several independent observations. Use it at every deployment and
+  on a schedule in operation, and track the trend. Follow-up:
   modified, review then re-register; vanished, retire or restore; phantom,
   register and review; resurrected, investigate. Renames are never inferred:
   an unrecorded rename is one vanished plus one phantom.
@@ -92,16 +100,19 @@ usage_details: |
 known_failure_modes: |
   1. An inventory generated from the scan, or by the same deploy step, scores
      100% by construction. It must be maintained independently.
-  2. The scan defines ground truth. Components it cannot see (loaded at run
-     time, fetched remotely, outside the scanned layout) are in no class. List
-     the locations scanned with every result. The reference implementation
-     scans a fixed layout.
+  2. A single source is itself untrusted. Components a source cannot see
+     (loaded at run time, fetched remotely, outside its layout) are in no
+     class. Reconcile against several independent sources where they exist,
+     report where they disagree, and list what each source covered. The
+     reference implementation reconciles one file-layout scan per run.
   3. If registration and scan normalise content differently (line endings,
      JSON key order), unchanged components read as modified. Use one
      canonicalisation routine for both.
   4. A model referenced by tag rather than digest can change silently. Such
      references are errors, not matches.
-  5. Point in time: each environment needs its own scan.
+  5. A result is a snapshot. Inventories drift, so run it continuously (at
+     each deployment and on a schedule), per environment, and track the
+     trend.
   6. Fidelity is not quality. An accurate inventory of an unsafe system
      scores 100%.
 
