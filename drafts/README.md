@@ -88,3 +88,4 @@ Tim: "This is honestly turning into a cyber security concept... Effectively this
 | audit-evidence freshness | Evidence Currency |
 The log-hygiene findings from the 2026-10-10 audit are classic audit-log issues: rotation erasing history, no session id, test traffic in production, incidents only as prose.
 Possible use: one line in the PR descriptions, and the organising idea if the parked candidates are revived. It also fits the best-effort stance: security operations measures detection and response, never "stops everything".
+- Tag name APPROVED by Tim (2026-10-10): `nist-metrology-2026-10`, created only on metrology's request after verification. It goes on the commit carrying the verdictLedger comment-tone pass plus the new `inventoryFidelity/README.md` (one SHA, pending). Then add package-level links (`verdictLedger/`, `inventoryFidelity/`) beside the example links, and re-pin both YAMLs and PR.md (`TAG_TBD`).
