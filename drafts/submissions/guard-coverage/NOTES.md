@@ -112,7 +112,7 @@ Caveats: it sees only attempts made through the tools, "distinct pattern" needs 
   2. operational conflicts;
   3. **risky attempts** (`-n` redirect ×7, `stage -A` ×2, `reset --hard` ×1);
   4. **benign reads refused** (tag, ls-tree, merge-base, fsck…).
-  Test probes are also present in the production log.
+  Three deliberate 'not-allowed' calls against the live server are also present (real calls, not test output; see the correction below).
 - ⚠ **The refusal log contains only patterns that are already guarded.** The `+branch` force-push succeeded, so it is absent from the log. Coverage computed from refusals is therefore near 100% by construction. The observation source must be **incidents** (allowed operations later found harmful) plus kind-3 refusals. Incidents are rare, about 3 known, so volume is the main limit on the estimate.
 - A companion the log supports today: the **false-refusal rate** (kind 4). Over-blocking pushes agents toward working around the guard.
 - Leads to verify:
@@ -128,7 +128,7 @@ Caveats: it sees only attempts made through the tools, "distinct pattern" needs 
 Excluded and reported separately:
 - gate failures and operational conflicts;
 - **benign refusals** (harmless actions blocked), which feed the false-refusal companion;
-- test probes, identified by actor or run id.
+- deliberate probe calls, identified by actor or run id. NOTE: lane-worktree records are real work, never exclude them as test traffic.
 
 **Pattern.** A declared, versioned classification function $\kappa(e)$ maps each observation to a pattern id, e.g. (tool, operation, normalised risky feature of the arguments). Changing $\kappa$ requires recomputing history; the version is reported.
 
@@ -179,9 +179,9 @@ Excluded and reported separately:
 **Feasibility at Tim's scale:** about 3 incidents plus a handful of risky refusals is far below any defensible threshold. The honest example shows the METHOD running on the real log: counts, time-to-guard and the trend, with the estimate correctly withheld as below threshold. It must not invent a probability.
 
 ## Feasibility prototype on the real gitRobot log (metrology, read-only, 2026-10-10)
-Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp, excluding Temp test repos. 154 real refusals.
+Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original run wrongly excluded the Temp lane-worktree repos as test traffic and counted 154 refusals; the true number is 177. See the correction.)
 - **No session identifier in the log.** `actor` is mcp or reaper, `pid` is the server process (many sessions each), and `run_id` exists only for gate runs. The incidence model (the session as unit) is NOT computable. Calendar day was used as a stand-in: V = 49 days.
-- **Test traffic is mixed in:** 1,308 records come from Temp test repos.
+- ~~Test traffic is mixed in: 1,308 records come from Temp test repos.~~ WRONG: see the correction below.
 - **My first κ pass was wrong twice:**
   - the "force-push" bucket (11) was all evidence-ledger admission refusals. ZERO force-push attempts were ever refused, consistent with the `+branch` hole, which succeeded;
   - the "-n repo redirect" bucket (8) was all BENIGN: `git log -n 25` (count), `git grep -n` (line numbers), `rev-parse --git-dir` (prints a path). **This is a gitRobot false-refusal bug, reported to mcp-mayhem-48.**
@@ -192,3 +192,5 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp, excluding Tem
 1. The definition survives. The forecast is correctly WITHHELD at this scale, so an example would show counts and time-to-guard only.
 2. The instrument needs three changes before it can carry the metric: (a) record the MCP session id per call; (b) separate test traffic; (c) a structured incident record (today incidents live only in prose).
 3. The κ errors show why the definition must require a declared, reviewed classification rule.
+
+**CORRECTION 2026-10-10 (verified by metrology after mcp-mayhem-48 flagged it):** the 1,308 git_ops records with an `AppData\Local\Temp\gitrobot-worktrees\<lane>` repo are NOT test traffic. They are real ZeroParadox operations in gitRobot's lane worktrees (626 commit, 461 stage, 217 attest, 4 unstage; actor mcp; 2026-09-20 → 10-09). Filtering them out discarded real evidence. They include 23 refusals (20 gate, 3 operational, 0 risky), so all 177 refusals are real, not 154. The "3 risky refusals" figure STANDS. The 3 'not-allowed' calls were deliberate live calls, not test-suite output. The test suite does not write to the production log (GITROBOT_DATA is unset).

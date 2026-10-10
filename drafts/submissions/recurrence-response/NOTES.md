@@ -86,7 +86,7 @@ So there is no universal closed taxonomy. The method requires each implementatio
 | source | span | session id | curated? | notes |
 |---|---|---|---|---|
 | MCP `http_calls.jsonl*` (gitRobot / sjv / verdictLedger) | ~28 h / ~11 d / ~9.5 h | yes | no | ROTATES BY DESIGN: 5 MB × 5 + current, oldest deleted (`mcpcommon/calllog.py:55-56`; "a rotating file cannot carry a claim about the past"). Raise `ZPLOG_MAX_BYTES` to keep more |
-| gitRobot `git_ops.jsonl` | 2026-08-22 → now | NO | no | append-only, but test traffic is mixed in |
+| gitRobot `git_ops.jsonl` | 2026-08-22 → now | NO | no | append-only. (Earlier said "test traffic mixed in": WRONG, those are real lane-worktree operations; see guard-coverage NOTES) |
 | ZeroParadox `.claude-local/autobiography/` | 2026-06-01 → 10-08 | yes | **YES**: 13 saved sessions | selection bias ("who chose the set") |
 | Claude Code `~/.claude/projects/C--Workspace-ZeroParadox/` | 2026-09-09 → 10-09 | yes | no: 43 sessions + 1,720 subagent transcripts, 2.6 GB | **only 30 days, matching Claude Code's default `cleanupPeriodDays`**. History is deleted daily unless that setting is raised |
 
