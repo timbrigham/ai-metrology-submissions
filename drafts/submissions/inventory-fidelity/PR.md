@@ -21,7 +21,7 @@ AI Inventory Fidelity measures whether an organisation's inventory of an AI syst
 
 - **Maturity:**
   - This is a newly proposed method, not adopted elsewhere, and not independently validated.
-  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at release tag `TAG_TBD`.
+  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at release tag `nist-metrology-2026-10` (commit `97d298887973566381768b61a8b748f84970c44f`).
   - It uses only the Python standard library, and its worked example reproduces the YAML's numbers exactly under test.
 - **Primary specification:** the YAML's `applied_definition`.
 - **Peer-reviewed support:** for the underlying measurement only.
