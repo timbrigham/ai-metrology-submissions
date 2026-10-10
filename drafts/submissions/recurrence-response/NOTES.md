@@ -81,3 +81,21 @@ So there is no universal closed taxonomy. The method requires each implementatio
 - labels assigned blind to the recurrence count, with agreement (kappa) reported.
 
 **Validity:** an implementer-declared taxonomy reopens "who chose the set". The EFFECTIVENESS ARM audits it. If "kind" changes do not reduce recurrence of the same signature more than "degree" changes, the declared taxonomy is not capturing shape, and the result must report that. The outcome validates the definition, so a taxonomy cannot be chosen to flatter the agent.
+
+## Data-source audit (metrology, read-only, 2026-10-10)
+| source | span | session id | curated? | notes |
+|---|---|---|---|---|
+| MCP `http_calls.jsonl*` (gitRobot / sjv / verdictLedger) | ~28 h / ~11 d / ~9.5 h | yes | no | ROTATES BY DESIGN: 5 MB × 5 + current, oldest deleted (`mcpcommon/calllog.py:55-56`; "a rotating file cannot carry a claim about the past"). Raise `ZPLOG_MAX_BYTES` to keep more |
+| gitRobot `git_ops.jsonl` | 2026-08-22 → now | NO | no | append-only, but test traffic is mixed in |
+| ZeroParadox `.claude-local/autobiography/` | 2026-06-01 → 10-08 | yes | **YES**: 13 saved sessions | selection bias ("who chose the set") |
+| Claude Code `~/.claude/projects/C--Workspace-ZeroParadox/` | 2026-09-09 → 10-09 | yes | no: 43 sessions + 1,720 subagent transcripts, 2.6 GB | **only 30 days, matching Claude Code's default `cleanupPeriodDays`**. History is deleted daily unless that setting is raised |
+
+## First count on the autobiography transcripts (proxy signature = tool + normalised first line of the error)
+- 25 files, 13 sessions, 12,354 tool calls, 438 errored results, 313 "recurrences". Zero identical retries.
+- ⚠ **The signature was too coarse:** "Exit code N" is 305 of 438 errors (PowerShell 245, Bash 60). Most "recurrences" were just "some command failed again", so the late-recurrence counts are an artifact.
+- The meaningful environment signatures are the specific ones:
+  - "String to replace not found in file" (25);
+  - "BLOCKED: this command invokes git" (15);
+  - "BLOCKED: ... runs a checker under tools/verify and truncates" (22).
+  The BLOCKED ones are ZeroParadox guard-hook refusals, so they are guard-coverage data too.
+- **Lesson for the definition:** "same failure" needs a SPECIFIC signature (failing command or check plus error class). A bare exit code is not a signature.
