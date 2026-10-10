@@ -21,7 +21,7 @@ This folder lives on the `drafts` branch of Tim's fork.
 
 | item | target | status |
 |---|---|---|
-| `comments/pr19/` | #19 paired-control non-measurement | drafted, 2 review rounds, awaiting Tim's OK |
+| `comments/pr19/` | #19 paired-control non-measurement | SHELVED (Tim, 2026-10-09). #19 was rejected by NIST pending clarifications; Tim will revisit |
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
 | `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references verified; implementation pushed at mcp-mayhem 8207aa5 and verified; YAML next |
 | (none) | new: NL-to-formal claim faithfulness | idea only |
@@ -40,7 +40,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 
 ## Decisions (Tim, 2026-10-09)
 - Submitter: `Tim Brigham (independent researcher)`. 6 of 13 open PRs are by independents, so there is precedent.
-- Contact: `timbrigham@zeroparadox.org`.
+- Contact: `timbrigham@gmail.com` (changed 2026-10-09: the zeroparadox.org homepage reads 'A machine-verified mathematical ontology', a triage trigger for NIST reviewers).
 - Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
 - Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
 

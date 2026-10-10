@@ -34,7 +34,7 @@ applied_definition: |
 submitter_organizations:
   - Tim Brigham (independent researcher)
 
-contact_email: timbrigham@zeroparadox.org
+contact_email: timbrigham@gmail.com
 
 ai_rmf_characteristics:
   - Accountable & Transparent
@@ -50,67 +50,54 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  In AI systems, much of the behaviour is set by unversioned text, such as
-  system prompts, tool schemas and guardrail policies, that sits outside
-  package managers. This method measures whether the registered content of
-  those artifacts is the content actually running. Governance practice asks
-  organisations to keep an AI inventory (NIST AI RMF GOVERN 1.6), but not how
-  to tell whether it is true. AI-BOM formats (the SPDX 3.0 AI profile,
-  CycloneDX ML-BOM) can list models and datasets. The components that most
-  often change an AI system's behaviour, however, are text files that
-  package-keyed inventories do not track. The **modified** class targets them:
-  same name, different content.
+  Much of an AI system's behaviour is set by unversioned text (system prompts,
+  tool schemas, guardrail policies) that sits outside package managers. AI-BOM
+  formats (the SPDX 3.0 AI profile, CycloneDX ML-BOM) can list models and
+  datasets, but not whether the registered content of these files is what is
+  running. Governance asks for an AI inventory (NIST AI RMF GOVERN 1.6) but not
+  how to check that it is true. The **modified** class targets that gap.
 
-  Use it at release, at deployment, and periodically in operation. Each class
-  calls for different follow-up:
-  - **modified**: review the change, then re-register;
-  - **vanished**: retire or restore the component;
-  - **phantom**: register and review it;
-  - **resurrected**: investigate why a retired component is back.
+  Use it at release, deployment and periodically in operation. Follow-up for
+  each class:
+  - modified: review, then re-register;
+  - vanished: retire or restore;
+  - phantom: register and review;
+  - resurrected: investigate.
+  Matching is by exact name. Renames are never inferred, so an unrecorded
+  rename appears as one vanished plus one phantom.
 
-  Matching is by exact name. Renames are never inferred, either by name
-  similarity or by equal hash, so an unrecorded rename appears as one vanished
-  plus one phantom.
+  Example. An inventory lists a system prompt, two tools and a guardrail
+  policy, plus one retired tool. The deployment has an edited prompt, the two
+  tools, an unregistered third tool, the retired tool, and no guardrail
+  policy. The counts are: matched 2, modified 1, vanished 1, phantom 1,
+  resurrected 1. Precision is 2/4 and recall is 2/5.
 
-  Example. An agent's inventory lists active entries for a system prompt, two
-  tools and a guardrail policy, plus one retired tool. The deployed artifact
-  has an edited system prompt, the two tools, an unregistered third tool, the
-  retired tool, and no guardrail policy. The counts are matched 2, modified 1,
-  vanished 1, phantom 1, resurrected 1. Precision is 2/4 and recall is 2/5.
-
-  Grounding: this is a newly proposed method, not yet adopted elsewhere. The
-  applied_definition is its specification, and the linked worked example is
-  its reference implementation. The underlying measurement is precision and
-  recall of a claimed component list against observed ground truth, keyed on
-  identity. Balliu et al. (2023) define precision as "the share of
-  dependencies in the SBOM that are correct with respect to the ground truth",
-  with dependencies "identical if their name and version match precisely". A
-  version mismatch therefore counts against both ratios, as **modified** does
-  here. Yu et al. (2024) apply the same comparison between "the reported
-  libraries and the ones actually installed". Both evaluate SBOM generators.
-  This method moves the measurement to an organisation's own AI inventory,
-  extends identity to content hashes of unversioned AI artifacts, and reports
-  the classes separately.
+  Grounding: this is a newly proposed method, not adopted elsewhere. The
+  applied_definition is the specification, and the linked example is a
+  reference implementation. The underlying measurement is identity-keyed
+  precision and recall of a claimed component list against ground truth.
+  Balliu et al. (2023) define precision as "the share of dependencies in the
+  SBOM that are correct with respect to the ground truth", with dependencies
+  "identical if their name and version match precisely". So a version
+  mismatch counts against both ratios, as **modified** does here. Yu et al.
+  (2024) compare "the reported libraries and the ones actually installed".
+  This method applies that measurement to an organisation's own AI inventory,
+  with content hashes for unversioned AI artifacts.
 
 known_failure_modes: |
-  1. An inventory generated from the scan measures nothing. If the inventory
-     is produced from the same scan, or by the same deploy step, it scores
-     100% by construction. The inventory must be maintained independently of
-     the artifact it is checked against.
-  2. The scan defines ground truth. Components the scanner cannot see (loaded
-     at run time, fetched from a remote registry, built in memory) are in no
-     class. Report the list of artifact locations scanned with every result.
-  3. Canonical form decides "modified". If registration and scan normalise
-     content differently (line endings, JSON key order), unchanged components
-     read as modified. Declare the canonical form per component type and use
-     one routine for both.
-  4. Digests, not tags. A model or dataset referenced by name and tag can
-     change without becoming modified. Such references are reported as
-     errors rather than matched.
-  5. Point in time. Fidelity describes the artifact scanned. A different
-     environment (staging versus production) needs its own scan.
-  6. Fidelity is not quality. A perfectly accurate inventory of an unsafe
-     system scores 100%.
+  1. An inventory generated from the scan, or by the same deploy step, scores
+     100% by construction. It must be maintained independently.
+  2. The scan defines ground truth. Components it cannot see (loaded at run
+     time, fetched remotely) are in no class. List the locations scanned with
+     every result.
+  3. If registration and scan normalise content differently (line endings,
+     JSON key order), unchanged components read as modified. Use one
+     canonicalisation routine for both.
+  4. A model referenced by tag rather than digest can change silently. Such
+     references are errors, not matches.
+  5. Point in time: each environment needs its own scan.
+  6. Fidelity is not quality. An accurate inventory of an unsafe system
+     scores 100%.
 
 references:
   - >-

@@ -89,3 +89,6 @@ Read strictly, gitRobot's Tier 1 restrictions are execution-verified at the libr
 - Keep the per-restriction report (verified-by-execution / verified-by-absence / unverified / failed) central, and the ratio secondary.
 - **Known failure mode: a gameable denominator.** A narrow R inflates the score, so publish |R| and where it came from.
 - Audit completeness is a SECONDARY figure, explicitly complementary to #16.
+
+## Deferred (2026-10-09)
+- **Audit completeness** (secondary figure) was cut from the YAML in the conciseness pass after NIST rejected #19 for length. It is a candidate follow-on, complementary to #16. The reviewed definition was: of the operations that the system claims to audit and that the harness performed (counted by the harness), the fraction with a matching audit record, refusals and permitted actions included.
