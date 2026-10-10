@@ -190,7 +190,7 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 
 **Consequences:**
 1. The definition survives. The forecast is correctly WITHHELD at this scale, so an example would show counts and time-to-guard only.
-2. The instrument needs three changes before it can carry the metric: (a) record the MCP session id per call; (b) separate test traffic; (c) a structured incident record (today incidents live only in prose).
+2. The instrument needs three changes before it can carry the metric: (a) record the MCP session id per call; (b) [withdrawn: the "test traffic" premise was wrong, see the correction]; (c) a structured incident record (today incidents live only in prose).
 3. The κ errors show why the definition must require a declared, reviewed classification rule.
 
 **CORRECTION 2026-10-10 (verified by metrology after mcp-mayhem-48 flagged it):** the 1,308 git_ops records with an `AppData\Local\Temp\gitrobot-worktrees\<lane>` repo are NOT test traffic. They are real ZeroParadox operations in gitRobot's lane worktrees (626 commit, 461 stage, 217 attest, 4 unstage; actor mcp; 2026-09-20 → 10-09). Filtering them out discarded real evidence. They include 23 refusals (20 gate, 3 operational, 0 risky), so all 177 refusals are real, not 154. The "3 risky refusals" figure STANDS. The 3 'not-allowed' calls were deliberate live calls, not test-suite output. The test suite does not write to the production log (GITROBOT_DATA is unset).
