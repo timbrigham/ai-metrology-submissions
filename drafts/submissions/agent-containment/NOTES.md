@@ -1,5 +1,7 @@
 # Candidate: verified agent containment (working name)
 
+> ⚠ SUPERSEDED on 2026-10-10 by Tim's reframe, below. `claimed-restriction-verification-rate.yml` is kept for history only and must not be submitted.
+
 **Status:** idea. Implementation read on 2026-10-09. Overlap and reference check running.
 
 ## The metric (draft wording)
@@ -92,3 +94,26 @@ Read strictly, gitRobot's Tier 1 restrictions are execution-verified at the libr
 
 ## Deferred (2026-10-09)
 - **Audit completeness** (secondary figure) was cut from the YAML in the conciseness pass after NIST rejected #19 for length. It is a candidate follow-on, complementary to #16. The reviewed definition was: of the operations that the system claims to audit and that the harness performed (counted by the harness), the fraction with a matching audit record, refusals and permitted actions included.
+
+## REFRAME (Tim, 2026-10-10, relayed by mcp-mayhem-48)
+Tim: a finite attempt list implies "stops everything except…", which is the opposite of the claim. "It needs to be an iterative or ongoing process, not just a single point in time metric." The new measure is how well the guard set tracks what agents actually attempt, over time:
+1. **Observed-pattern coverage:** the share of distinct observed risky patterns that have a guard AND a regression test.
+2. **Time to guard:** first observation to the test that pins it.
+3. **Residual risk:** the Good-Turing unseen mass, (patterns seen once) / (observations). Report it only above a stated volume.
+4. **Trend:** new patterns per batch of sessions.
+Caveats: it sees only attempts made through the tools, "distinct pattern" needs a classification rule, and it needs volume.
+
+## Audit-log check (metrology, read-only, 2026-10-10)
+- Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`. 5,930 records from 2026-08-22 to 2026-10-10: 4,869 allowed, 817 started, 177 refused, 67 failed.
+- The 177 refusals form 62 (op, detail) keys, 43 of them singletons. The kinds:
+  1. gate failures (×42 pre-commit, ×30 ledger admission);
+  2. operational conflicts;
+  3. **risky attempts** (`-n` redirect ×7, `stage -A` ×2, `reset --hard` ×1);
+  4. **benign reads refused** (tag, ls-tree, merge-base, fsck…).
+  Test probes are also present in the production log.
+- ⚠ **The refusal log contains only patterns that are already guarded.** The `+branch` force-push succeeded, so it is absent from the log. Coverage computed from refusals is therefore near 100% by construction. The observation source must be **incidents** (allowed operations later found harmful) plus kind-3 refusals. Incidents are rare, about 3 known, so volume is the main limit on the estimate.
+- A companion the log supports today: the **false-refusal rate** (kind 4). Over-blocking pushes agents toward working around the guard.
+- Leads to verify:
+  - Good, I. J. (1953), "The population frequencies of species and the estimation of population parameters", Biometrika;
+  - Böhme, M. (2018), "STADS: Software Testing as Species Discovery", ACM TOSEM.
+- Recommended to Tim: split containment off as a later, separate submission with its own tag. Pending his decision.

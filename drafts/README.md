@@ -56,7 +56,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 |---|---|---|---|
 | evidence currency | trimmed, final fact-check passed | verdictLedger @ 6a8d029 | yes (clean export) |
 | AI inventory fidelity | rev 3, aligned to code | inventoryFidelity @ 77c6d09 | yes (clean export: exact numbers, 86 tests, stdlib only) |
-| claimed-restriction verification | rev 3 (concise) | being REBUILT by mcp-mayhem-48 (the first harness attempted 1 of 25 tools) | no |
+| agent containment | SUPERSEDED by Tim's 2026-10-10 reframe (ongoing guard-coverage over observed patterns) | not being built | no; proposed as a later, separate submission |
 
 Before the tag: the containment example, a joint final adversarial review of all three, NIST's clarification, and a maturity note in each PR description. Then ONE tag, and re-pin all three links to it.
 
