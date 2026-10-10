@@ -149,3 +149,29 @@ Excluded and reported separately:
 - the `+branch` force-push (77c6d09);
 - `reset --hard` (gitRobot README);
 - ZeroParadox's .NET relative-path writes.
+
+## Research results (2026-10-10). Quotes checked by metrology in the extracted text; DOIs checked in Crossref
+**Overlap:** no duplicate.
+- Adjacent catalogue entries: "Agent / Tool Abuse Testing" (it generates observations and defines no metric) and "Post-deployment Feedback" (the incident input stream, with nothing on the absorption rate).
+- ⚠ The false-refusal companion is ALREADY in the catalogue (FRR-f / FRR-p). Drop it and cite those entries instead.
+
+**References:**
+1. ★ Böhme, M. (2018). "STADS: Software Testing as Species Discovery." ACM TOSEM 27(2), 1-52. https://doi.org/10.1145/3210309
+   - "The Good-Turing estimator [49] is computed as the number of singletons divided by the number of samples (i.e., generated test inputs)."
+   - "the sample coverage C(n) = 1 - U(n) measures the probability that the n + 1th generated test input belongs to an already discovered species."
+2. ★ Böhme, M., Liyanage, D., & Wüstholz, V. (2021). "Estimating Residual Risk in Greybox Fuzzing." ESEC/FSE '21, 230-241. https://doi.org/10.1145/3468264.3468570
+   - Blackbox estimators "systematically and substantially under-estimate the true risk" under adaptive sampling.
+- Also: Good (1953), Biometrika 40(3-4), the origin of the estimator. Ozment (2007), QoP, the critique of vulnerability-discovery-model assumptions; he counts "detection events".
+
+## Design changes the literature forces (v1)
+1. **Headline = a probability about the NEXT session, not a share of past patterns.** The share of observed patterns that are guarded tends to 100% by construction. Report the sample coverage, i.e. the estimated probability that the next observed pattern is already guarded.
+2. **Incidence model, with the session as the sampling unit** (STADS Eq. 28-29, U ≈ Q1/V). Count a pattern once per session in which it appears; Q1 = patterns seen in exactly one session, V = sessions. Repeated refusals of one guarded pattern must not inflate n.
+3. **Reset windows.** Adding a guard changes the sampling process: an incident becomes a refusal, and agents adapt. Following FSE21's reset estimator, estimate only within windows of a fixed agent, tool and guard version, and restart the counts at each version change.
+4. **Minimum volume is our own stated choice.** No source gives a number. Justify the threshold (e.g. require f2 > 0, citing the MSE < 1/n bound) and say so. Below it, report counts only.
+5. **Time-to-guard** is a plain duration statistic with no reference behind it, so present it as such.
+6. **Discovery trend** normalised by sessions (Ozment).
+7. **Drop** the coverage share as a headline and the false-refusal companion (it is in the catalogue).
+
+**Minimal honest claim (agent's draft):** "Within a fixed agent, tool and guard version, and over what the detection process can observe, this estimates the rate at which observed risky-action patterns are absorbed into regression-tested guards, and bounds the probability that the next observed pattern is new. It says nothing about patterns the detection process cannot see, and it is invalid across version changes or when detection effort shifts."
+
+**Feasibility at Tim's scale:** about 3 incidents plus a handful of risky refusals is far below any defensible threshold. The honest example shows the METHOD running on the real log: counts, time-to-guard and the trend, with the estimate correctly withheld as below threshold. It must not invent a probability.
