@@ -42,7 +42,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 - Submitter: `Tim Brigham (independent researcher)`. 6 of 13 open PRs are by independents, so there is precedent.
 - Contact: `timbrigham@gmail.com` (changed 2026-10-09: the zeroparadox.org homepage reads 'A machine-verified mathematical ontology', a triage trigger for NIST reviewers).
 - Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
-  - ⚠ OPEN (2026-10-10): the third candidate is now PARKED. Tim to decide: tag evidence currency + inventory fidelity on their own once NIST clarifies, or keep waiting.
+  - DECIDED (Tim, 2026-10-10, in mcp-mayhem-48's session): "Drop containment". The tag covers evidence currency + inventory fidelity ONLY, created on metrology's request after final verification. Guard coverage and recurrence response stay parked.
 - Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
 
 ## NIST change on 2026-10-09: conciseness is now a criterion
@@ -70,3 +70,5 @@ Before the tag: Tim's decision on the open tagging question above, a joint final
 - mcp-mayhem 78dd222: scope statement added to the root README and both example READMEs. Verified here from a clean export, and both examples' numbers are unchanged.
 - Tim approved the source-comment tone pass in verdictLedger/core. It is mcp-mayhem-48's work.
 - Containment (Part B) is NOT being built. It was reframed, renamed Incident-Driven Guard Coverage, and PARKED.
+- gitRobot `-n` false refusal: confirmed by mcp-mayhem-48 (also 8). Tim approved the narrow fix: `-n` for log/grep, `--git-dir` for rev-parse, and grep added to the read allow-list. It does not touch either submission's code.
+- Classification-rule sensitivity, demonstrated: the same log gave 62 keys / 43 singletons under metrology's normalisation and 44 / 26 under mcp-mayhem-48's.
