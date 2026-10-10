@@ -63,3 +63,8 @@ Before the tag: the containment example, a joint final adversarial review of all
 ## Framing rules from Tim (2026-10-10), apply to every submission
 - **Proportionate threat model:** best effort against an agent that misbehaves but is not ill-intentioned. Covering the top few common patterns is enough. Never imply completeness; state the scope, e.g. the attempts listed.
 - **Proof of concept:** the reference implementations are single-author proofs of concept built for one dedicated environment, not production or complete tools. The metrics can be general, but the implementations' scope must be stated plainly. All three YAMLs carry the same sentence.
+
+## 2026-10-10 update
+- mcp-mayhem 78dd222: scope statement added to the root README and both example READMEs. Verified here from a clean export, and both examples' numbers are unchanged.
+- Tim approved the source-comment tone pass in verdictLedger/core. It is mcp-mayhem-48's work.
+- Containment (Part B) is NOT currently being built in mcp-mayhem-48. Waiting on Tim for how to proceed.
