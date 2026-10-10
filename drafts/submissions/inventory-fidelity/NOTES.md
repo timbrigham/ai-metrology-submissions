@@ -1,6 +1,6 @@
 # Candidate: inventory fidelity (working name)
 
-**Status:** idea. Implementation read on 2026-10-09. Overlap and reference check running.
+**Status:** SUBMISSION-COMPLETE (2026-10-10). The YAML and PR.md in this folder are final, pinned to mcp-mayhem tag `nist-metrology-2026-10` (= 97d2988), verified. The implementation is inventoryFidelity/, not SJV's Lean reconcile. The notes below are the history.
 
 ## The metric (draft wording)
 - Keep a registry of the exact objects an AI system consists of or depends on: models, datasets, prompt templates, tool definitions, guardrail configs.

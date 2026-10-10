@@ -1,6 +1,6 @@
 # Candidate: evidence currency (working name)
 
-**Status:** feasibility checked on 2026-10-09. No YAML yet.
+**Status:** SUBMISSION-COMPLETE (2026-10-10). The YAML and PR.md in this folder are final, pinned to mcp-mayhem tag `nist-metrology-2026-10` (= 97d2988), verified. The notes below are the history.
 
 ## The metric (draft wording)
 - A decision (merge, push, ship) relies on gate verdicts.

@@ -7,6 +7,24 @@ This folder lives on the `drafts` branch of Tim's fork.
 - **Never open a PR from this branch.** A submission PR must add exactly one YAML file under `submissions/`.
 - To submit, cut a fresh branch from `main` (for example `git switch -c submit/<name> main`), copy the one YAML into `submissions/`, and push only that branch.
 
+## ▶ RESUME HERE: current state (updated 2026-10-10, end of session)
+| item | folder | state | next action |
+|---|---|---|---|
+| **Evidence Currency** | `submissions/evidence-currency/` | **SUBMISSION-COMPLETE.** YAML + PR.md final, pinned to tag `nist-metrology-2026-10` (= 97d2988), verified, both validators pass | Wait for NIST's clarification, then Tim opens the PR (procedure below) |
+| **AI Inventory Fidelity** | `submissions/inventory-fidelity/` | **SUBMISSION-COMPLETE.** Revised for multi-source, continuous reconciliation and independence of sources (Tim, 2026-10-10); pinned to the same tag; validators pass | Same. Optional: one more review round on the last one-line independence addition |
+| Incident-Driven Guard Coverage | `submissions/guard-coverage/` | PARKED. Design v1 + refs verified (STADS TOSEM'18, FSE'21), data audit done; no YAML | Wait for instrumentation data (items 1, 2, 4 in progress in mcp-mayhem-48). Then a YAML, an example (read-only tool over the gitRobot log + incident register), and reviews |
+| Recurrence response | `submissions/recurrence-response/` | PARKED. Design v2 (implementation-declared shape taxonomy + effectiveness arm) + refs verified (Bouzenia & Pradel ASE'25, SWE-agent NeurIPS'24; MIRAGE-Bench as prior art); data audit done | Needs a SPECIFIC failure signature (not "Exit code N") and data: Claude Code transcripts now kept 365 days. Then an example script, a YAML, reviews. Strongest TEVV fit of the four |
+| #19 comment | `comments/pr19/` | SHELVED (#19 was rejected by NIST pending clarification) | Tim to revisit |
+| Ideas only | (none) | claim coverage; NL-to-formal faithfulness | Not started |
+
+**Open external dependencies:**
+- NIST's promised clarification (hbooth on #19, 2026-10-09). None as of 2026-10-10. Tim declined a scheduled check, so look only when asked.
+- mcp-mayhem-48 is building instrumentation items 1 (session + surface), 2 (refusal_class) and 4 (SJV incident register), AFTER the tag. Item 3 was dropped. When the SHAs arrive, verify each is logging-only (no change to allow/refuse).
+
+**Submission procedure (Tim posts):** for each metric, cut a fresh branch from upstream `main`, copy that ONE YAML into `submissions/`, push it to the fork, and open the PR to usnistgov with that folder's `PR.md` as the body. Tim confirms the two checklist commitments (self-check, will follow the PR).
+
+**Scope caveat recorded 2026-10-10:** NIST's scope is AI TEVV. Evidence Currency fits as a check on TEVV evidence. Inventory Fidelity fits as configuration verification. The parked two are the most central (they evaluate agent behaviour or safety controls).
+
 ## Rules for anything leaving this folder
 - Run a separate adversarial review in a fresh instance, then get Tim's explicit OK.
 - Lead with the checkable artifact. No branded or ontology vocabulary. Disclose when code is Tim's own.
@@ -23,10 +41,11 @@ This folder lives on the `drafts` branch of Tim's fork.
 |---|---|---|
 | `comments/pr19/` | #19 paired-control non-measurement | SHELVED (Tim, 2026-10-09). #19 was rejected by NIST pending clarifications; Tim will revisit |
 | (none) | #20 tool-descriptor mutation | decided not to comment: the gap is the submitter's own implementation |
-| `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | feasibility checked: public and MIT, overlap is ADJACENT; references verified; implementation pushed at mcp-mayhem 8207aa5 and verified; YAML next |
+| `submissions/evidence-currency/` | new: evidence currency (verdictLedger) | SUBMISSION-COMPLETE (see RESUME HERE) |
 | (none) | new: NL-to-formal claim faithfulness | idea only |
 | `guard-coverage/` | was: verified agent containment (claimed-restriction verification). SUPERSEDED on 2026-10-10 by Incident-Driven Guard Coverage, see the status table | superseded / parked |
-| (none) | new: inventory fidelity (Tim, 2026-10-09). Reconcile a registry of the exact objects against a scan of the real artifact; report phantoms (present, not registered) and vanished (registered, not present) separately | overlap CLEAR/ADJACENT (#14), refs verified (Balliu IEEE S&P'23; Yu DSN'24), AI hook = AI RMF GOVERN 1.6; MUST add content-hash identity; needs YAML + example. SJV `reconcile` does this for Lean declarations (structuredJsonValidator/consumers/lean/operations.py:264); an AI version needs a scanner for AI objects, references and an overlap check |
+| `submissions/inventory-fidelity/` | new: AI inventory fidelity | SUBMISSION-COMPLETE (see RESUME HERE) |
+| `submissions/recurrence-response/` | new: recurrence response | PARKED (see RESUME HERE) |
 | (none) | new: claim coverage (Tim, 2026-10-09). Of the claims a project publishes (model card, system card, assurance case), the fraction bound to a gate that checks them. It is the link upstream of evidence currency | idea only. Needs a prior-art check (requirements traceability, assurance cases / GSN) and code that computes it |
 
 ## Framing (Tim, 2026-10-09)
@@ -41,7 +60,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
 ## Decisions (Tim, 2026-10-09)
 - Submitter: `Tim Brigham (independent researcher)`. 6 of 13 open PRs are by independents, so there is precedent.
 - Contact: `timbrigham@gmail.com` (changed 2026-10-09: the zeroparadox.org homepage reads 'A machine-verified mathematical ontology', a triage trigger for NIST reviewers).
-- Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
+- (HISTORY) Tagging: ONE mcp-mayhem tag, created only once all three candidate examples (evidence currency, inventory fidelity / SJV, agent containment / gitRobot) are done and verified. Then every YAML is re-pinned to that tag.
   - DECIDED (Tim, 2026-10-10, in mcp-mayhem-48's session): "Drop containment". The tag covers evidence currency + inventory fidelity ONLY, created on metrology's request after final verification. Guard coverage and recurrence response stay parked.
 - Still one PR per metric. NIST's check requires exactly one file under `submissions/` per PR. The three PRs can be opened together.
 
@@ -52,7 +71,7 @@ Lead with the AI-accountability version: "are your published claims (model and s
   - All three YAMLs need a conciseness pass. #19 was about 540 words when rejected.
   - WAIT for NIST's promised clarification before submitting anything. This fits the one-tag plan.
 
-## Status at 2026-10-09 (end of day)
+## (HISTORY) Status at 2026-10-09: superseded by RESUME HERE
 | submission | YAML | example | verified by metrology |
 |---|---|---|---|
 | evidence currency | trimmed, final fact-check passed | verdictLedger @ 6a8d029 | yes (clean export) |
