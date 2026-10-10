@@ -177,3 +177,18 @@ Excluded and reported separately:
 **Minimal honest claim (agent's draft):** "Within a fixed agent, tool and guard version, and over what the detection process can observe, this estimates the rate at which observed risky-action patterns are absorbed into regression-tested guards, and bounds the probability that the next observed pattern is new. It says nothing about patterns the detection process cannot see, and it is invalid across version changes or when detection effort shifts."
 
 **Feasibility at Tim's scale:** about 3 incidents plus a handful of risky refusals is far below any defensible threshold. The honest example shows the METHOD running on the real log: counts, time-to-guard and the trend, with the estimate correctly withheld as below threshold. It must not invent a probability.
+
+## Feasibility prototype on the real gitRobot log (metrology, read-only, 2026-10-10)
+Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp, excluding Temp test repos. 154 real refusals.
+- **No session identifier in the log.** `actor` is mcp or reaper, `pid` is the server process (many sessions each), and `run_id` exists only for gate runs. The incidence model (the session as unit) is NOT computable. Calendar day was used as a stand-in: V = 49 days.
+- **Test traffic is mixed in:** 1,308 records come from Temp test repos.
+- **My first κ pass was wrong twice:**
+  - the "force-push" bucket (11) was all evidence-ledger admission refusals. ZERO force-push attempts were ever refused, consistent with the `+branch` hole, which succeeded;
+  - the "-n repo redirect" bucket (8) was all BENIGN: `git log -n 25` (count), `git grep -n` (line numbers), `rev-parse --git-dir` (prints a path). **This is a gitRobot false-refusal bug, reported to mcp-mayhem-48.**
+- **Real risky refusals:** 3 in 7 weeks (`reset --hard` ×1, `stage -A` ×2). With about 3 known incidents, n ≈ 6, far below any defensible threshold.
+- **False refusals are the richer signal:** 26 benign reads refused as not allow-listed, plus the 8 `-n` refusals. The catalogue's FRR-f / FRR-p cover model prompts, not tool actions.
+
+**Consequences:**
+1. The definition survives. The forecast is correctly WITHHELD at this scale, so an example would show counts and time-to-guard only.
+2. The instrument needs three changes before it can carry the metric: (a) record the MCP session id per call; (b) separate test traffic; (c) a structured incident record (today incidents live only in prose).
+3. The κ errors show why the definition must require a declared, reviewed classification rule.
