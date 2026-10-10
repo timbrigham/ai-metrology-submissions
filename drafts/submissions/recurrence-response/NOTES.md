@@ -21,3 +21,18 @@ The containment redesign of 2026-10-10 was this rule firing live.
 - A non-circular candidate measures the OUTCOME instead: after a patch versus after a shape change, did the failure recur, and how soon?
 - Or it measures agents WITHOUT such rules: do they change shape unprompted?
 - The decision waits on the research.
+
+## Loop capping (Tim, 2026-10-10: "We implemented loop capping in zeroparadox for a reason")
+- R-LOOPCAP (`ZeroParadox/tools/process/review-loop-cap.md`): "The gates will always find something. Stopping is a decision about SEVERITY, not a wait for silence." BEDROCK gets up to 5 rounds and ORDINARY gets 2. The caps are authoritative in `tools/verify/gate_round.py`.
+- **The measured reason** (review-gates.md, quoting R-LOOPCAP's cost line): "three of the last four bedrock findings were introduced by the previous round's fix". Iterating is not neutral, because fixes create new defects.
+- Also measured, 2026-08-01: "four of the next round's six editorial findings landed in the one file no gate had yet seen", which existed only because it was edited after the gates finished.
+- Data: per-round notes in `.claude-local/notes/gate_round*_*.md` and `gate_round.json`. PRIVATE.
+
+## The non-circular outcome measures this suggests
+1. **Convergence:** findings per round. Do they fall, or plateau?
+2. **Fix-introduced defect share:** of round k+1's findings, the fraction caused by round k's fix. It measures the cost of patching harder, independent of any count-forcing rule.
+3. **Shape-change effectiveness:** after a forced change of approach (cap, checker, re-scope), does the failure class recur?
+
+**Reference leads, UNVERIFIED:**
+- Śliwerski, Zimmermann & Zeller, "When do changes induce fixes?" (MSR 2005, the SZZ algorithm);
+- Yin, Yuan, Zhou, Pasupathy & Bairavasundaram, "How do fixes become bugs?" (ESEC/FSE 2011).
