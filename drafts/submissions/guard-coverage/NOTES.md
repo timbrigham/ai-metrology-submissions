@@ -289,7 +289,7 @@ The example is built but not committed. A fresh adversarial review found code is
    - Patterns seen only in earlier windows count as absent, so the estimate errs high for never-seen patterns.
    - The grounding line now says "erring high, the safe side here" instead of "conservative for a bound".
    - Schema check OK; 867 words.
-2. **Real data exercises little.** K=3, 0 policy refusals, all time-to-guard values are lower bounds (median withheld), and n=0 for item 4 because no session carries versions yet. The real-data line will read roughly "2/3 guarded; median withheld; Û withheld (n=0)". Items 2 and 4 are shown only on synthetic data, and the README says so. Raised with Tim as a choice: submit now, framed honestly, or let data accumulate.
+2. **Real data exercises little.** K=3, 0 policy refusals, all time-to-guard values are lower bounds (median withheld), and n=0 for item 4 because no session carries versions yet. The real-data line will read roughly "2/3 guarded; median withheld; Û withheld (n=0)". Items 2 and 4 are shown only on synthetic data, and the README says so. DECIDED (Tim, 2026-10-13): **submit once the example is verified, framed honestly**; do not wait for data.
 3. **Synthetic results are being redone.** v1 reported 0.989 coverage, but it was mostly trivial: 63% of windows had truth=0; where truth>0 it was 0.970; against the in-window target it was 0.537. v1 also logged every pre-guard attempt as a refusal, which real logging cannot see.
    - v2: pre-guard attempts appear only as incidents recorded with probability r; guards that don't log; coverage reported only where truth>0, with a cluster-bootstrap CI; both targets named.
    - **Never quote v1 numbers.**
