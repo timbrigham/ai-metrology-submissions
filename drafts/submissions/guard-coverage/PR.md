@@ -25,7 +25,7 @@ Incident-Driven Guard Coverage measures how well regression-tested guards on an 
   - The worked example runs on a public, redacted extract of that environment's real logs and incident register, with checksums, and reproduces the report exactly under test.
   - The real data is thin: three observed patterns, two of whose tested guards were added on the day measured, and one agent session with version data so far. No occurrence time is known, so time to guard is only a lower bound.
   - Time to guard and the unseen-pattern estimate are therefore also shown on a seeded synthetic replay, which the example labels as synthetic. The replay uses one setting under the estimator's own assumptions, so it checks the implementation, not the method.
-- **Primary specification:** the YAML's `applied_definition`; the worked example is the reference implementation.
+- **Primary specification:** the YAML's `applied_definition`; the worked example runs the reference implementation on a public fixture.
 - **Peer-reviewed support:** for the unseen-pattern estimate only. Items 1-3 are plain counts and durations.
   - Böhme (TOSEM 2018) treats software testing as species discovery and uses the Good-Turing discovery probability as a residual-risk measure.
   - Böhme, Liyanage and Wüstholz (ESEC/FSE 2021, Eq. 22) give the estimator on incidence data, together with its reset variants.

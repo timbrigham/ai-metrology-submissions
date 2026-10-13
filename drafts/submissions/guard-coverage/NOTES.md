@@ -433,3 +433,20 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - "misbehaving agent that does not adapt to evade them".
   - PR.md: "the worked example is the reference implementation"; item 4 phrased as a count.
 - Not changed: STADS pages. The reviewers disagree on the article number (7 vs 4) and Crossref has none, so "27(2), 1-52" stays.
+
+## Adversarial review 3: REVISE → fixed (2026-10-13)
+- B1: "two tests were added that day" was wrong. The DC-71 guard itself was new that day (6312942 → b6bae57). Now "two tested guards were completed that day".
+- B2: "at least 52 days" was false; the bound is 51.89. Now "at least 51.9 days".
+- B3: the "18 hours" did not say what it was measured from. Now "blocked about 18 hours after detection" (hook commit 872811c, 17 h 55 m after detected_at).
+- B4: candour. The Example now says "the median and item 4 are withheld".
+- Also:
+  - synthetic figures marked "conditional on n ≥ 100";
+  - failure mode 6 adds that a zero time to guard (detected at fix time) says nothing;
+  - failure mode 7 ties restarted windows to the FSE'21 reset estimators;
+  - the catalogue-comparison paragraph is cut from usage_details (PR.md keeps it);
+  - PR.md: "the worked example runs the reference implementation on a public fixture".
+- Not changed:
+  - STADS article number: reviewers said 7, then 4, then 7, and Crossref has none, so "27(2), 1-52" stays.
+  - Attest exclusion: covered by "refusals not about the action's safety".
+- Now 940 words (siblings 802/907); Example 78; validators OK.
+- The article "Building NIST Submissions with AI Agents" is a private Claude Docs doc, revised after its own adversarial review. It needs one more fresh review before Tim shares it publicly.
