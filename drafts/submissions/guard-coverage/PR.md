@@ -1,6 +1,6 @@
 ## Metric submission
 
-Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of how likely the next session is to show a pattern not yet seen.
+Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of how many not-yet-recorded patterns the next agent session will record.
 
 ## Checklist
 
@@ -25,11 +25,11 @@ Incident-Driven Guard Coverage measures how well regression-tested guards on an 
   - The worked example runs on a public, redacted extract of that environment's real logs and incident register, with checksums, and reproduces the report exactly under test.
   - The real data is thin: three observed patterns, two of whose tested guards were added on the day measured, and one agent session with version data so far. No occurrence time is known, so time to guard is only a lower bound.
   - Time to guard and the unseen-pattern estimate are therefore also shown on a seeded synthetic replay, which the example labels as synthetic. The replay uses one setting under the estimator's own assumptions, so it checks the implementation, not the method.
-- **Primary specification:** the YAML's `applied_definition`, with the worked example's README as the reference implementation.
+- **Primary specification:** the YAML's `applied_definition`; the worked example is the reference implementation.
 - **Peer-reviewed support:** for the unseen-pattern estimate only. Items 1-3 are plain counts and durations.
   - Böhme (TOSEM 2018) treats software testing as species discovery and uses the Good-Turing discovery probability as a residual-risk measure.
   - Böhme, Liyanage and Wüstholz (ESEC/FSE 2021, Eq. 22) give the estimator on incidence data, together with its reset variants.
 - **Relation to the catalogue and open submissions:**
   - The AI Metrology Center's "Agent / Tool Abuse Testing" generates attempts, and "Post-deployment Feedback" collects incidents. Neither measures how fast observed patterns are absorbed into tested guards.
   - Detector Gap (#6) measures whether a detector still catches obfuscated variants of a known hazard. It could test a guard's robustness within one pattern; this metric counts patterns and the time to guard them.
-- **Context:** this applies the security operations loop (log, detect, respond, add a regression test) to AI agents' tool use, against a misbehaving but not adversarial agent. It reports how complete and how fast that loop is, and makes no claim that unobserved actions are covered.
+- **Context:** this applies the security operations loop (log, detect, respond, add a regression test) to AI agents' tool use, against a misbehaving agent that does not adapt to evade the guards. It reports how complete and how fast that loop is, and makes no claim that unobserved actions are covered.

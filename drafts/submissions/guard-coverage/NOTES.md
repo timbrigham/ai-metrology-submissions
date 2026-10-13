@@ -414,3 +414,22 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - "(model)" parenthetical removed.
 - Kept: the metadata (Safe, Secure & Resilient; Privacy & Security Evaluation, the only fitting TEVV value). STADS stays "27(2), 1-52": Crossref gives pages 1-52 and no article number.
 - Validators OK. Total 1001 words; Example 62.
+
+## Adversarial review 2: REVISE → fixed (2026-10-13)
+- B1: "An incident with no known session counts toward K and G only" was FALSE, because such incidents feed items 2 and 3 in the code. Now: "counts in items 1-3 but not in item 4."
+- B2: the Example looked gamed. Now: "1 of 3 patterns was guarded until the day measured, and 3 of 3 after two tests were added that day; one was blocked within about 18 hours but took at least 52 days to a tested guard."
+- B3: the synthetic figures were selective. Now: "close to unbiased but imprecise (RMSE about 70% of its mean) and is withheld in 81% of windows."
+- B4: length. 1,001 → 924 words; the definition is 378.
+  - The gitRobot-specific list of refusal reasons became "refusals not about the action's safety".
+  - The Robbins rationale became "n ≥ 100, a convention". Both reviewers agreed it justified nothing.
+  - The reset-estimator sentence was dropped.
+- Also:
+  - "U_n is an upper bound on the probability".
+  - G "declared in a manifest".
+  - Failure mode 3 adds the sessionless-incident bias in Q1.
+  - Failure mode 5 adds unversioned agent instructions.
+  - Failure mode 7 reworded.
+  - Lifecycle stage is now Operate & Monitor only.
+  - "misbehaving agent that does not adapt to evade them".
+  - PR.md: "the worked example is the reference implementation"; item 4 phrased as a count.
+- Not changed: STADS pages. The reviewers disagree on the article number (7 vs 4) and Crossref has none, so "27(2), 1-52" stays.
