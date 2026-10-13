@@ -205,3 +205,32 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
   - Verbs: add_incident (open/wontfix), set_guarded (guard_commit, regression_test and guarded_at together; only from open), annotate.
   - Times are UTC and ordered (observed ≤ detected ≤ guarded). pattern_id = <tool>.<operation>.<shape> under pattern rule "1".
   - Seeded with 2 incidents, both guarded. It shows no OPEN incidents yet, which is a statement about the recorded incidents, not about coverage.
+
+## YAML rev 2 (2026-10-13), after adversarial review (REVISE, 6 blocking)
+- **B1 fixed:** the estimator is $Q_1/n$ with n = sessions in the window, including empty ones (FSE21 Eq. 22, Good-Turing; verified in the text). The earlier "Q1/V" mis-cited STADS: there V = "the sum of all entries in the incidence matrix" (total incidences), verified. The invented "f2>0" withhold was replaced by n ≥ 100 from Robbins' bound "mean squared error ... less than 1/n" (quoted in STADS; verified), applied by analogy.
+- **B2:** items 1-3 are cumulative; only item 4 is windowed.
+- **B3:** incidents with an unknown session count toward K and G only; an unknown occurrence time gives a lower bound, excluded from the median.
+- **B4:** the guard set is declared; only logging guards contribute refusal observations.
+- **B5:** failure mode on versions.
+- **B6:** removed the unverifiable "44 vs 62".
+- Length cut from 879 words. FSE21's "reset estimators systematically overestimate and exhibit a high variance" is now disclosed (verified).
+
+## Prerequisites before the example can make the YAML true
+1. **Register fix (mcp-mayhem-48):**
+   - INC-0001 occurred through a SHELL before gitRobot existed; its registered regression test replays through gitRobot `read`. Under the definition it is NOT in G unless the shell-layer guard (ZeroParadox `block_git_gh.ps1` + its test) is the recorded guard.
+   - INC-0002 has detected_at = guarded_at (found while building a harness, not an agent attempt).
+   - DC-71 ×3 still to be recorded.
+2. **New instrumentation (needs Tim's approval):** log VERSIONS per session (gitRobot commit, hook commit, MCP clientInfo name and version). Without them, windows cannot be computed from the data.
+3. **Data reality (2026-10-13):** since abdb679 / d94f093 there are 0 agent sessions, 0 policy refusals, and only reaper rows. `session` is the HTTP mcp-session-id (a connection, not a conversation). The ZeroParadox shell hooks log nothing.
+4. **Wait for the DC-71 guard** (zeroparadox session, confirming the settings change with Tim). It gives the only exact time-to-guard: observed 2026-10-04.
+
+## Minimum worked example (reviewer's spec, adopted)
+- A stdlib tool in mcp-mayhem at a release tag. Inputs: audit JSONL, register JSON, pattern-rule version, a guard-set manifest (gitRobot + ZeroParadox hooks: repo, whether it logs, its test) and window boundaries. Output: JSON + text for items 1-4, every withheld value with its reason.
+- A PUBLIC fixture: a redacted extract of the real policy-refusal rows and register entries, with checksums. One command reproduces the YAML's numbers. (`.mcp-local` is private.)
+- A real-data section stated as-is: K and G with sources; unguarded patterns with ages; time-to-guard exact values and flagged lower bounds; post-field n; Û withheld (n<100).
+- A SYNTHETIC replay (labelled synthetic, seeded, 1,000 replicates): about 30 Zipf-distributed patterns, about 2,000 sessions, a guard added after first sight with injected lag, and a probability shift at each guard. Report:
+  - Û bias and coverage against the true expected-new rate, within windows and pooled;
+  - the withhold rate at n<100;
+  - recovery of the injected lags.
+  This answers "no evidence the method works".
+- The YAML Example field: at most 60 words, one line real plus one line synthetic, from the tagged run.

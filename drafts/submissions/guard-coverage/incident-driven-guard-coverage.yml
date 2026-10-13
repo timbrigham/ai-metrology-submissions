@@ -3,45 +3,48 @@ schema_version: "1.0"
 name: Incident-Driven Guard Coverage
 
 applied_definition: |
-  Measures, over time, how well the guards that mediate an AI agent's tool use
-  keep up with the risky actions agents are actually observed to attempt. It
-  measures the guard set and its maintenance, not the agent, and makes no claim
-  that unobserved actions are covered.
+  Measures how well regression-tested guards on an AI agent's tool use keep up
+  with the risky actions agents are observed to attempt.
 
   **Observations.** An observation is either:
   - an **incident**: an action the tools allowed that was later found harmful,
     recorded in an incident register; or
-  - a **policy refusal**: an attempt refused because a guard exists to stop
-    that action.
+  - a **policy refusal**: an attempt refused by a guard in the declared guard
+    set, logged with its session and refusal reason.
 
+  A guard that does not log its refusals contributes no refusal observations.
   Refusals for other reasons (a failed quality gate, a state conflict, a read
   outside an allow-list) are not observations. A declared, versioned
   classification rule maps each observation to a **pattern**.
 
-  **Sampling unit and window.** The unit is an agent session. A pattern counts
-  once per session in which it is observed. Counts are kept within a window of
-  fixed agent, tool and guard versions, and restart when any of these changes,
-  because adding a guard changes what agents attempt.
+  **Unit and window.** The unit is an agent session, identified by the session
+  id the guard layer logs. A pattern counts once per session, whether it was
+  seen as an incident, a refusal or both. An incident whose session is
+  unknown (for example, one that went through a general shell) counts toward
+  $K$ and $G$ but not toward item 4.
 
-  At time $T$, let $K$ be the patterns observed so far, and $G \subseteq K$ the
-  patterns that have both a guard and a regression test that replays the
-  observed action through the agent's entry point and asserts it is refused.
-  Report:
+  Let $K$ be the patterns observed so far, and $G \subseteq K$ those with a
+  guard and a regression test that replays the observed action through the
+  same entry point and asserts it is refused. Items 1-3 are cumulative:
 
-  1. **Guarded share** $|G|/|K|$, with both counts and every unguarded pattern
-     listed with its age since first observation.
-  2. **Time to guard**: for each guarded pattern, the time from its first
-     observation to the commit that guards it; report the median.
+  1. **Guarded share** $|G|/|K|$, with both counts and each unguarded pattern
+     listed with its age.
+  2. **Time to guard**: for each guarded pattern, from first occurrence to the
+     commit that guards it; report the median. When the occurrence time is
+     unknown, measure from detection, mark the value as a lower bound and leave
+     it out of the median.
   3. **Discovery trend**: new patterns per batch of sessions.
-  4. **Unseen-pattern estimate**: within a window of $V$ sessions, with $Q_1$
-     the patterns observed in exactly one session,
+  4. **Unseen-pattern bound**: within a window of $n$ sessions with fixed
+     agent, tool and guard versions (every session counts, including those with
+     no observation), with $Q_1$ the patterns seen in exactly one session,
 
-     $$\hat{U} = \frac{Q_1}{V}$$
+     $$\hat{U} = \frac{Q_1}{n}$$
 
-     estimates the probability that the next session shows a pattern never
-     observed before. It is reported only when $V \ge V_{min}$ and some pattern
-     has been observed in exactly two sessions; otherwise it is withheld and
-     only the counts are reported. $V_{min}$ is declared with the result.
+     estimates the expected number of never-observed patterns in the next
+     session, an upper bound on the probability that it shows one. Report it
+     with $n$, $Q_1$ and $Q_2$, and only when $n \ge 100$; otherwise report the
+     counts alone. The window restarts when any version changes, because adding
+     a guard can change what agents attempt.
 
 submitter_organizations:
   - Tim Brigham (independent researcher)
@@ -66,54 +69,45 @@ model_specificity: model agnostic
 domain_specificity: domain agnostic
 
 usage_details: |
-  Use it to monitor an AI agent deployment whose safety depends on tool-level
-  guards. It applies security operations practice to agents: log, detect,
-  respond, and add a regression test. It reports how complete and how fast
-  that loop is.
+  Use it to evaluate, in production, the control layer of an AI agent
+  deployment whose safety depends on tool-level guards, against a misbehaving
+  but not adversarial agent. It applies the security operations loop (log,
+  detect, respond, add a regression test) and reports how complete and how
+  fast that loop is. It makes no claim that unobserved actions are covered.
 
-  The threat model is proportionate: an agent that misbehaves under pressure
-  but is not adversarial. The method makes no completeness claim. Guards are
-  added for the patterns agents actually show, and the result states how much
-  of what has been observed is covered, how quickly new patterns are absorbed,
-  and an estimate of what has not yet been seen.
+  Example. TODO: replace with one line of real-data output and one line of
+  synthetic-replay results from the tagged worked example.
 
-  The incident register is essential. A refusal log contains only patterns that
-  are already guarded, so an unguarded pattern appears only when an allowed
-  action is later found harmful. Incidents can also occur outside the mediated
-  tools (for example through a general shell); only the register sees those.
-
-  Example. TODO: replace with the worked example's actual output once it is
-  built.
-
-  This complements the AI Metrology Center's "Agent / Tool Abuse Testing",
-  which generates attempts, and "Post-deployment Feedback", which collects
+  It complements the AI Metrology Center's "Agent / Tool Abuse Testing", which
+  generates attempts, and "Post-deployment Feedback", which collects
   incidents. Neither measures how fast observed patterns are absorbed into
   tested guards.
 
-  Grounding: a newly proposed measurement. The unseen-pattern estimate applies
-  the Good-Turing discovery probability, used as a residual-risk measure in
-  software testing (Böhme, 2018), with the incidence model and the session as
-  the sampling unit. Because adding guards changes the sampling process, counts
-  restart at each version change, following Böhme et al. (2021), who show that
-  estimators assuming a fixed distribution "systematically and substantially
-  under-estimate the true risk" otherwise. The implementation is a
-  single-author proof of concept used in one environment; it is not
-  production-ready and has not been independently replicated.
+  Grounding: a newly proposed measurement; items 1-3 are plain counts and
+  durations. Item 4 is the Good-Turing discovery probability on incidence data
+  (Böhme et al., 2021, Eq. 22), used as a residual-risk measure in software
+  testing (Böhme, 2018). Its threshold uses the bound that the mean squared
+  error is "less than 1/n", applied by analogy. Window restarts follow the
+  reset estimators of Böhme et al. (2021), which over-estimate (conservative
+  for a bound) with high variance. The implementation is a single-author proof
+  of concept used in one environment; it is not production-ready and has not
+  been independently replicated.
 
 known_failure_modes: |
-  1. Unrecorded incidents are invisible. The guarded share is only as complete
-     as the incident register; recording discipline is part of the method.
-  2. The classification rule decides the counts. Two reasonable rules applied
-     to the same refusal log produced 44 and 62 patterns. Declare and version
-     the rule, and classify at the point of refusal, not afterwards from text.
-  3. The guarded share rises with effort by construction. Read it with the
-     ages of unguarded patterns and the unseen-pattern estimate.
-  4. Small volume. Below the declared threshold the estimate is withheld; a
-     small deployment may never reach it.
-  5. Version changes. Counts from different agent, tool or guard versions are
-     not pooled.
-  6. Missing fields. Log records written before session or refusal-reason
-     fields existed cannot be attributed; analyse those periods separately.
+  1. Unrecorded incidents are invisible. A refusal log holds only patterns
+     already guarded, so unguarded patterns appear only through the incident
+     register, and recording discipline is part of the method.
+  2. The classification rule decides the counts: too fine inflates $Q_1$ and
+     $\hat{U}$, too coarse hides variants. Declare and version the rule, and
+     classify at the point of refusal, not afterwards from text.
+  3. Detection lag. Recent sessions' incidents may not be found yet, which
+     biases $Q_1$ low. Compute item 4 only over sessions older than a declared
+     lag.
+  4. Sessions are what the guard layer logs, typically a client connection,
+     not a conversation. Sessions that never touch the guard layer are not in
+     $n$.
+  5. Versions are what the client reports. A model change the client does not
+     report silently pools windows.
 
 references:
   - >-
@@ -128,7 +122,7 @@ references:
     https://doi.org/10.1145/3468264.3468570
 
 implementation_resources:
-  - "TODO: worked example in mcp-mayhem, pinned to a release tag"
+  - "TODO: worked example in mcp-mayhem with a public fixture, pinned to a release tag"
 
 computational_requirements: >-
   CPU only, negligible cost. Python 3.11 or later, standard library only.
