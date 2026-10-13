@@ -240,3 +240,12 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 - Public fixture: **redacted real extract + synthetic replay**. Keep only timestamps, op, refusal_class, pattern id, hashed session and versions. No file contents, args or private paths.
 - Correct INC-0001 to name the shell-layer guard (block_git_gh.ps1 + its test): **Yes**. The register forbids rewriting a guard, so mcp-mayhem-48 picks the method (annotate or supersede).
 - Sequence: item 5 → the example (tool + fixture + synthetic + README + review) → the DC-71 guard lands (zeroparadox session, confirming settings.json with Tim) → final numbers → verification → a NEW tag (name: Tim's call).
+
+## Register state and corrections (2026-10-13)
+- DC-71 RECORDED by mcp-mayhem-48 (Tim approved): INC-0003/0004/0005, open, pattern `powershell.dotnet-file-write.relative-path` (rule "1"). The register holds 5 entries (2 guarded, 3 open) and validates.
+  - detected_at is a sourced UPPER bound (11d10ad 2026-10-04T20:26:20Z for occurrences 1-2; the 01:44Z restore for occurrence 3).
+  - observed_at is null for all three, since only dates are known.
+- ⚠ CORRECTION to my earlier claim that the DC-71 guard would give "the only exact time-to-guard": it will NOT. observed_at is null, so time-to-guard is a lower bound from detection. EVERY real incident is currently a lower-bound case, so the synthetic replay carries the "the method works" evidence.
+- INC-0001 fix: a new verb `correct_guard`, with an append-only `guard_history` (reason, when, and the entry point the superseded guard covered). The tool reads the CURRENT guard for G and time-to-guard; history is provenance. The new guard is ZeroParadox block_git_gh.ps1 + its test (read-only lookup).
+- Item 5: the ZeroParadox hook commit will be null (gitRobot can't see it). Guard versions come from the guard-set manifest input, and the example README will say so.
+- Order: item 5 → correct_guard → the example. Tim confirmed "Yes, build it" in mcp-mayhem-48's session.
