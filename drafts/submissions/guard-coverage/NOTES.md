@@ -338,3 +338,13 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - **Wait for the INC-0001 fix before tagging.** The sequence is: ZeroParadox reset control → metrology verifies it → correct_guard → the fixture and expected report are regenerated → metrology re-verifies from a clean export → tag.
   - The fixture's reduced args are **accepted**.
   - Tag name: no preference, so metrology picked **`nist-metrology-2026-10b`**, a sibling of the existing tag.
+
+## INC-0001 regression control LANDED and VERIFIED (2026-10-13)
+- ZeroParadox 5bf7106 (2026-10-13T17:41:53Z) was merged into `illustrated` as **283157b90077450f651907054b12ca2a45089949 at 2026-10-13T17:47:17Z**. Pushed at 18:00:12Z; it is on origin/illustrated. The merge changes only test_block_git_gh.ps1 (+50/−3). Tim approved it in the zeroparadox session.
+- Metrology verified from a clean `git archive 283157b` export: **"ALL 27 CONTROLS BEHAVED", exit 0**. The suite includes:
+  - GIT-INC0001: `git reset --hard` sent verbatim through Invoke-Hook, the same path as bare git, DENY;
+  - GIT-MUT1: the deny branch is removed, the SHA changes, and the result goes to ALLOW;
+  - GIT-MUT0: the unmutated copy still denies.
+- block_git_gh.ps1 is registered for both the Bash and PowerShell matchers at 283157b, and the hook has existed since 872811c. The test sends tool_name PowerShell only; INC-0001's shell was not recorded. Accepted: the hook does not branch on the tool.
+- Values sent to mcp-mayhem-48 for correct_guard: guard_commit 283157b, guarded_at 2026-10-13T17:47:17+00:00, regression_test `tools/verify/claude_hooks/test_block_git_gh.ps1::GIT-INC0001`, entry point agent-shell. Provenance: the hook has denied all direct git since 872811c, 2026-08-23T14:22:18Z.
+- Expected real item 1: 3/3. Expected time to guard for git.reset.work-destroying: ≥ 51.89 d (from detected_at 2026-08-22T20:27:40Z), a lower bound.
