@@ -280,3 +280,20 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
   - Validators: schema OK, inspect OK. The applied text is now 831 words.
   - For INC-0001 the guard came ~18h after detection, and the tested guard about 52 days later. The example README reports both; the gap is what the metric exists to show. 872811c goes in the correct_guard note as provenance, not as G.
 - Consequence: the register is 4 of 5 entries in G until the reset control lands; patterns |G|/|K| = 2/3 (git.reset.work-destroying is pending).
+
+## Example review round 1: YAML-side items (2026-10-13, from mcp-mayhem-48)
+The example is built but not committed. A fresh adversarial review found code issues (mcp-mayhem-48 is fixing them) and these YAML items:
+1. **Estimate vs bound: FIXED in the YAML.**
+   - Item 4 is renamed "Unseen-pattern estimate".
+   - The target is now named: $U_n$, the expected number of patterns absent from the window's n sessions that appear in the next one. $U_n$ bounds the probability (Markov), and $\hat U$ is an estimate of that bound, not a guarantee.
+   - Patterns seen only in earlier windows count as absent, so the estimate errs high for never-seen patterns.
+   - The grounding line now says "erring high, the safe side here" instead of "conservative for a bound".
+   - Schema check OK; 867 words.
+2. **Real data exercises little.** K=3, 0 policy refusals, all time-to-guard values are lower bounds (median withheld), and n=0 for item 4 because no session carries versions yet. The real-data line will read roughly "2/3 guarded; median withheld; Û withheld (n=0)". Items 2 and 4 are shown only on synthetic data, and the README says so. Raised with Tim as a choice: submit now, framed honestly, or let data accumulate.
+3. **Synthetic results are being redone.** v1 reported 0.989 coverage, but it was mostly trivial: 63% of windows had truth=0; where truth>0 it was 0.970; against the in-window target it was 0.537. v1 also logged every pre-guard attempt as a refusal, which real logging cannot see.
+   - v2: pre-guard attempts appear only as incidents recorded with probability r; guards that don't log; coverage reported only where truth>0, with a cluster-bootstrap CI; both targets named.
+   - **Never quote v1 numbers.**
+4. **Window restarts.** The manifest carries one version per guard, so a window can restart at most once per guard. mcp-mayhem-48 will either add a version history or add a caveat, and will say which; if it's a caveat, add it to known_failure_modes.
+5. INC-0002 has detected_at = guarded_at; the tool flags it as "detected at fix time".
+6. ZeroParadox is a PUBLIC repository (visibility checked by mcp-mayhem-48), so naming it, DC-71 and its SHAs in the fixture is fine.
+- Held local commits in mcp-mayhem: 8851b35 (correct_guard) and b77a76f (the release-zip test fix). They ship with the example after review and Tim's OK. No tag yet.

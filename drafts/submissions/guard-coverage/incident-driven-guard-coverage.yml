@@ -35,14 +35,17 @@ applied_definition: |
      unknown, measure from detection, mark the value as a lower bound and leave
      it out of the median.
   3. **Discovery trend**: new patterns per batch of sessions.
-  4. **Unseen-pattern bound**: within a window of $n$ sessions with fixed
+  4. **Unseen-pattern estimate**: within a window of $n$ sessions with fixed
      agent, tool and guard versions (every session counts, including those with
      no observation), with $Q_1$ the patterns seen in exactly one session,
 
      $$\hat{U} = \frac{Q_1}{n}$$
 
-     estimates the expected number of never-observed patterns in the next
-     session, an upper bound on the probability that it shows one. Report it
+     estimates $U_n$, the expected number of patterns absent from the
+     window's $n$ sessions that appear in the next session. $U_n$ bounds the
+     probability that the next session shows such a pattern; $\hat{U}$ is an
+     estimate of that bound, not a guarantee. Patterns seen only in earlier
+     windows count as absent, which errs high for patterns never seen. Report it
      with $n$, $Q_1$ and $Q_2$, and only when $n \ge 100$; otherwise report the
      counts alone. The window restarts when any version changes, because adding
      a guard can change what agents attempt.
@@ -89,8 +92,8 @@ usage_details: |
   (Böhme et al., 2021, Eq. 22), used as a residual-risk measure in software
   testing (Böhme, 2018). Its threshold uses the bound that the mean squared
   error is "less than 1/n", applied by analogy. Window restarts follow the
-  reset estimators of Böhme et al. (2021), which over-estimate (conservative
-  for a bound) with high variance. The implementation is a single-author proof
+  reset estimators of Böhme et al. (2021), which over-estimate (erring high,
+  the safe side here) with high variance. The implementation is a single-author proof
   of concept used in one environment; it is not production-ready and has not
   been independently replicated.
 
