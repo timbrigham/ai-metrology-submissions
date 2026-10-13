@@ -17,6 +17,8 @@ This folder lives on the `drafts` branch of Tim's fork.
 | #19 comment | `comments/pr19/` | SHELVED (#19 was rejected by NIST pending clarification) | Tim to revisit |
 | Ideas only | (none) | claim coverage; NL-to-formal faithfulness | Not started |
 
+**Submission timing (Tim, 2026-10-13):** agreed NOT to wait for NIST's clarification (revisions happen in place on an open PR). PR branches are NOT prepared yet: Tim said "not yet". Prepare them only when he asks.
+
 **Open external dependencies:**
 - NIST's promised clarification (hbooth on #19, 2026-10-09). None as of 2026-10-10. Tim declined a scheduled check, so look only when asked.
 - Instrumentation (after the tag; item 3 dropped):
@@ -25,7 +27,8 @@ This folder lives on the `drafts` branch of Tim's fork.
   - ⚠ Not yet seen in production: an MCP call carrying a captured `session` (only reaper rows so far). Confirm on the first agent call after the restarts.
   - **Item 4 DONE and VERIFIED** at mcp-mayhem 0808754 (2026-10-13): an SJV `incidents` consumer in its OWN store at `.mcp-local/incidents/incidents.json` (private data, not in the public repo; backed up by the supervisor). Purely additive (gitRobot, verdictLedger and inventoryFidelity untouched; SJV CLI default unchanged); SJV 215/215 at a clean export; a copy of the live register validates (VALID): 2 incidents, both guarded (INC-0001 git.reset.work-destroying, INC-0002 gitrobot.push.refspec-force); the real file was not modified.
   - **ALL APPROVED INSTRUMENTATION COMPLETE** (1 abdb679, 2 d94f093, 4 0808754; 3 dropped).
-  - Open: the ZeroParadox .NET relative-path incident awaits facts from the zeroparadox session (requested by mcp-mayhem-48). INC-0002's observed_at is null: the production log has no '+'/':' push, so the force-push was observed outside production logging.
+  - Third incident FOUND (2026-10-13): ZeroParadox DC-71, "a worktree agent's relative-path .NET file call writes into the main checkout" (`.claude-local/DEFECT_CLASSES.md` § DC-71; ticket `queue/tooling-dotnet-relative-path-writes-main.md`). 3 occurrences (2026-10-04 ×2, 2026-10-08), all OPEN: the guard hook is specified but unbuilt, blocked on Tim. It happened via the agent's PowerShell tool, so it is invisible to gitRobot's log, the register's raison d'être. Facts sent to mcp-mayhem-48 to record; Tim confirms there. This is the register's first OPEN incident, so coverage is no longer trivially 100%.
+  - DC-72 (blocked operation relayed to the human as a command, 2 occurrences): register candidate, Tim had no preference, so NOT recorded. INC-0002's observed_at is null: the production log has no '+'/':' push, so the force-push was observed outside production logging.
 
 **Submission procedure (Tim posts):** for each metric, cut a fresh branch from upstream `main`, copy that ONE YAML into `submissions/`, push it to the fork, and open the PR to usnistgov with that folder's `PR.md` as the body. Tim confirms the two checklist commitments (self-check, will follow the PR).
 
