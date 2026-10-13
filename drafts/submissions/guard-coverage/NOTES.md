@@ -200,3 +200,8 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 - ⚠ Exclude `op=attest` refusals: they are the hook asking whether it may skip its second run, not an agent attempting anything (mcp-mayhem-48's reviewer). Counting them would inflate gate.
 - Classes that differ from a naive reading: a push with '+' or ':' is policy; a push to a non-local branch name, or without a reason, is operational; "not a worktree" is policy if a foreign path exists, operational if the path has vanished.
 - `session` and `surface` (abdb679) supply the sampling unit. Rows before abdb679 / d94f093 lack these keys: absent means "before the field existed", never "unknown". Analyse pre- and post-field windows separately.
+- **Incident register** (0808754): SJV consumer `incidents`, store `mcp-mayhem/.mcp-local/incidents/incidents.json` (private).
+  - CLI: `sjv --data <file> --consumer incidents --collection incidents apply|validate|view summary`.
+  - Verbs: add_incident (open/wontfix), set_guarded (guard_commit, regression_test and guarded_at together; only from open), annotate.
+  - Times are UTC and ordered (observed ≤ detected ≤ guarded). pattern_id = <tool>.<operation>.<shape> under pattern rule "1".
+  - Seeded with 2 incidents, both guarded. It shows no OPEN incidents yet, which is a statement about the recorded incidents, not about coverage.
