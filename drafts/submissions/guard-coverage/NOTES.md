@@ -464,3 +464,6 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - "Ten of the errors caught and logged are below";
   - "caught mostly by structure".
   - Also applied: the same hook correction, the regex row now caught by "Self-check of the first pass", the tag rule reworded, and the diagram caption and title no longer claim "nothing crosses without a receipt".
+
+## 2026-10-13: README line-98 fix (mcp-mayhem 875646f, untagged)
+Verified read-only: README-only diff (7+/6-) from 75b8862. The 18-hour claim is removed; wording now matches the YAML Example (hook committed day after first record, 872811c, may have blocked earlier; >=51.9 days to replaying test 5bf7106, merged as 283157b). mcp-mayhem-48 reports 65 tests pass, fixture and expected_report unchanged. Goes into the single re-tag after Tim's data refresh. Refresh plan from mcp-mayhem-48: rerun make_fixture with the same salt, regenerate the README real-output block from a real run, recheck README prose numbers (session counts, n).
