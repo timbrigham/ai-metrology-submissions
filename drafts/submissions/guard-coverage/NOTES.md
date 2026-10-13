@@ -309,3 +309,28 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
 - Window restarts: mcp-mayhem chose an optional per-guard `version_history`, tested, so no caveat is needed.
 - Schema OK; 906 words.
 - The Example TODO is filled from the tagged run.
+
+## Worked example VERIFIED from a clean export (2026-10-13)
+- mcp-mayhem f7da1ed78f86d0b13978c474e1e3ae5a3c35023d is equal to origin/main. It follows f813216 (versions), 8851b35 (correct_guard and guard_history) and b77a76f (release-zip test fix). Tim confirmed the push in mcp-mayhem-48's session. NO TAG yet.
+- Metrology checked a `git archive f7da1ed` export:
+  - fixture CHECKSUMS.sha256: all 5 OK;
+  - guardCoverage tests: **62/62**;
+  - `measure --json` is byte-for-byte equal to expected_report.json, and the text report matches the README and the message;
+  - `synthetic --seed 7 --replicates 1000` output equals the reported figures.
+- mcp-mayhem-48 reports sjv 222, verdictLedger 652, gitRobot 568 and guardCoverage mutation 16/16. Metrology did not re-run these here; gitRobot was 568 at f813216 plus b77a76f.
+- REAL: |G|/|K| = 2/3. git.reset.work-destroying is unguarded, age ≥ 51.75 d: the agent-shell guard has no replaying test, and 77c6d09 sits at the wrong entry point.
+  - Time to guard: refspec-force ≥ 0.00 d (detected at fix time); dotnet-file-write ≥ 8.67 d; median withheld.
+  - Discovery trend: 3 before the first logged session, then 0 and 0.
+  - Item 4: n = 0 (no window yet), withheld.
+- SYNTHETIC (seed 7, 1000 replicates, r = 0.30, 70% of guards logging; 30 Zipf patterns, 2000 sessions):
+  - Item 4: 28,908 windows; 80.8% withheld at n < 100, so 5,540 are reported (19.2% of windows, 63.6% of sessions).
+  - Against U_n: bias +0.0004 (95% CI −0.0000 to +0.0009), RMSE 0.0180 (mean Û 0.0262), coverage 0.501.
+  - Against the never-observed target: bias +0.0185, coverage 0.903.
+  - Item 2: exact-only median minus the injected median is −9.2 h (injected median 126 h); 12,031 values are lower bounds, with a mean shortfall of 36.5 h.
+  - End to end, replicate 0 agrees.
+- REDACTION (metrology's own scan):
+  - Register keeps only ids, pattern, times, guard commit, has_regression_test, entry point and hashed session. No harm text and no notes.
+  - Audit keys: ts, op, decision, refusal_class, surface, hashed session, versions.
+  - No C:\, C:/, Users, timbr, @, .mcp-local, Temp, token, password or raw session id.
+  - DEVIATION from Tim's "no args": 72 refused rows keep a reduced `args`: read → a git verb name (ls-tree, grep, tag, reset, …); push → `{"branch":"b"}` (the shape of the refspec). It is documented in metadata.json as the rule-1 pattern feature. Benign, but Tim was told.
+  - The salt is published, which is fine: it hashes only random MCP connection ids.
