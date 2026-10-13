@@ -30,7 +30,8 @@ applied_definition: |
   1. **Guarded share** $|G|/|K|$, with both counts and each unguarded pattern
      listed with its age.
   2. **Time to guard**: for each guarded pattern, from first occurrence to the
-     commit that guards it; report the median. When the occurrence time is
+     first commit at which both the guard and its regression test are in
+     place; report the median. When the occurrence time is
      unknown, measure from detection, mark the value as a lower bound and leave
      it out of the median.
   3. **Discovery trend**: new patterns per batch of sessions.

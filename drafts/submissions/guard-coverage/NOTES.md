@@ -264,3 +264,19 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 - INC-0001 still names gitRobot 77c6d09 (it replays through `read`), pending `correct_guard` to ZeroParadox block_git_gh.ps1 and its test. Until then the guarded share depends on how that guard is counted; the example must use the corrected guard.
 - Also reported by mcp-mayhem-48: the ZeroParadox check_hashes.py repin is done (30a444b, narrowed in b2d36be), and Tim declined the gitRobot worktree-hint change. Neither affects this metric.
 - Next, in order (mcp-mayhem-48): the item 5 review fixes → correct_guard for INC-0001 → the worked example.
+
+## Item 5 VERIFIED; INC-0001 test gap; guarded_at rule (2026-10-13)
+- Item 5 (versions) is mcp-mayhem f813216, equal to origin/main. gitRobot was restarted at 14:23:30Z, after the commit.
+  - Every row now carries `versions`: gitrobot_commit (read at import), gitrobot_dirty, client_name, client_version, consumer_hook_commit (always null).
+  - Metrology verified:
+    - Clean clone: test_audit_attribution + test_push_async **30/30**.
+    - Clean `git archive` export: **567/568**. The failure is test_the_cli_reports_no_client: gitrobot_commit is None because an archive has no .git. The code is correct; the test assumes a checkout. Asked mcp-mayhem-48 to skip or adjust it and to say in the example README that versions need a git checkout. Not blocking.
+- ⚠ INC-0001 GAP (found by mcp-mayhem-48, confirmed read-only by metrology):
+  - ZeroParadox block_git_gh.ps1 (872811c, 2026-08-23T14:22:18Z) denies all direct git, but test_block_git_gh.ps1 contains no "reset" control.
+  - So no regression test replays the observed action, and INC-0001 is not in G under the definition until one exists.
+  - Chosen: (a), one `git reset --hard` → DENY control plus a mutation check. The zeroparadox session has queued it for the next tooling batch, after the wave 3 push; Tim sees it first. They will send the commit and merge SHAs and times, the control id and the suite line. mcp-mayhem-48 then runs correct_guard (verb being built).
+- RULE (metrology → mcp-mayhem-48): guarded_at = the FIRST moment at which both the guard and a same-entry-point regression test are in place on the branch agents use. This matches DC-71 (merge b6bae57).
+  - YAML item 2 now reads "to the first commit at which both the guard and its regression test are in place".
+  - Validators: schema OK, inspect OK. The applied text is now 831 words.
+  - For INC-0001 the guard came ~18h after detection, and the tested guard about 52 days later. The example README reports both; the gap is what the metric exists to show. 872811c goes in the correct_guard note as provenance, not as G.
+- Consequence: the register is 4 of 5 entries in G until the reset control lands; patterns |G|/|K| = 2/3 (git.reset.work-destroying is pending).
