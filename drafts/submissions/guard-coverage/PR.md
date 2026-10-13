@@ -21,9 +21,10 @@ Incident-Driven Guard Coverage measures how well regression-tested guards on an 
 
 - **Maturity:**
   - This is a newly proposed method, not independently validated.
-  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at release tag `nist-nov-2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`). It uses only the Python standard library.
+  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at release tag `nist2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`). It uses only the Python standard library.
   - The worked example runs on a public, redacted extract of that environment's real logs and incident register, with checksums, and reproduces the report exactly under test.
-  - The real data is thin: three observed patterns and one agent session with version data so far. Time to guard and the unseen-pattern estimate are therefore shown on a seeded synthetic replay, which the example labels as synthetic.
+  - The real data is thin: three observed patterns, two of whose tested guards were added on the day measured, and one agent session with version data so far. No occurrence time is known, so time to guard is only a lower bound.
+  - Time to guard and the unseen-pattern estimate are therefore also shown on a seeded synthetic replay, which the example labels as synthetic. The replay uses one setting under the estimator's own assumptions, so it checks the implementation, not the method.
 - **Primary specification:** the YAML's `applied_definition`, with the worked example's README as the reference implementation.
 - **Peer-reviewed support:** for the unseen-pattern estimate only. Items 1-3 are plain counts and durations.
   - Böhme (TOSEM 2018) treats software testing as species discovery and uses the Good-Turing discovery probability as a residual-risk measure.

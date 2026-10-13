@@ -398,3 +398,19 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
 - Validators: schema and inspect OK for all three YAMLs. Links: every repo link returns 200; the ACM DOIs return 302 to dl.acm.org, which returns 403 to scripts (bot blocking); the IEEE DOIs return 202.
 - PR.md written. Positioned against Detector Gap (#6), which measures variants within one pattern.
 - NEXT: a fresh adversarial review of the YAML and PR.md, then Tim's OK, then PR branches (Tim's call), one per YAML off upstream main.
+
+## RETAGGED: `nist2026` (2026-10-13). nist-nov-2026 is gone.
+- Tim deleted nist-nov-2026 (it had the month wrong) and, instructing mcp-mayhem-48, created an **annotated** `nist2026` (tag object 78e6a04, on commit **75b8862**). Its annotation names all three implementations. The GitHub release was not recreated, so there is currently no release. All three YAMLs and PR.md files now cite nist2026, and all 6 repo links return 200. The commit is unchanged, so nothing needs re-verifying.
+- ⚠ Metrology's own slip: a `git fetch --prune-tags` run in mcp-mayhem's clone deleted the stale LOCAL nist-nov-2026 tag. It matched Tim's intent, but it changed another session's refs. Disclosed to Tim. From now on, fetch read-only without pruning.
+
+## Adversarial review 1 of the final YAML + PR.md: REVISE → fixed (2026-10-13)
+- B1: "less than 1/n" was unattributed and did not justify n ≥ 100. Now: "n ≥ 100 is a convention: Robbins' bound for abundance data (MSE "less than 1/n", cited in Böhme, 2018) gives an RMSE below 0.1 there, loose against typical values (about 0.03 in the replay)."
+- B2: "bounds the probability that the next session shows" overstated it. U_n now counts patterns RECORDED (refused by a logging guard or entered in the register), and failure mode 1 says U_n scales with the recording rate and does not bound unrecorded attempts.
+- B3: the real headline looked staged, since two tested guards were added on the measurement day. The Example now says "Real data … informs only item 1: 3 of 3 patterns guarded, two by tests added on the day measured; other values are lower bounds or withheld." PR.md says the same.
+- Non-blocking items, all done:
+  - The definition matches the code: G needs a guard and test at EVERY entry point where the pattern was observed; a pattern guarded before first observation has no value; refused evidence records are listed among non-observations; batches are "declared".
+  - Explanations moved out of the definition into failure modes 5-7. Definition 451 → 392 words.
+  - The CI is written "about 0 to 0.0009". "19% of windows" is explicit. The replay is said to "check the implementation, not the method".
+  - "(model)" parenthetical removed.
+- Kept: the metadata (Safe, Secure & Resilient; Privacy & Security Evaluation, the only fitting TEVV value). STADS stays "27(2), 1-52": Crossref gives pages 1-52 and no article number.
+- Validators OK. Total 1001 words; Example 62.
