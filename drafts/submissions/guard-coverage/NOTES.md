@@ -367,3 +367,24 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
 - ⚠ PRE-TAG FINDING (metrology → mcp-mayhem-48): W2 (17:41:54–17:47:17Z, n=2) matches ZeroParadox's commit and merge, and its sessions are almost certainly client `zp-hooks-attest`, which is hook automation, not an agent. The YAML's unit is the AGENT session, but the tool counts every client in n.
   - No reported number changes, since Û is withheld either way. It is still a mismatch between the definition and the implementation, and cheap to fix.
   - Asked for: the manifest declares the non-agent clients (or the agent clients); the tool excludes those sessions from n and from item 3's batches and reports how many it excluded; the README states it; the fixture and expected output are regenerated.
+
+## Agent-client rule; example RE-VERIFIED at 75b8862 (2026-10-13)
+- mcp-mayhem 75b8862d4b1c340dcba55aca50e3edd4524da520 is equal to origin/main, and only guardCoverage/ changed. Tim confirmed the push.
+  - W1 = claude-code (the agent).
+  - W2 = zp-hooks-attest (ZeroParadox's pre-commit hook calling attest), which is automation.
+  - The 4 null-client rows were gitRobot's reaper (surface internal), already excluded.
+- Rule: the manifest's `agent_clients: ["claude-code"]` is an ALLOW-list.
+  - Undeclared clients, and sessions with no recorded client, are not counted; they are listed with count and reason.
+  - If agent_clients is absent, no session counts; it is never treated as "everyone".
+  - Refusals outside an agent session are not observations.
+- Metrology checked a clean `git archive 75b8862` export:
+  - checksums 5/5; guardCoverage **65/65**;
+  - `--json` equal to expected_report.json;
+  - synthetic byte-identical to f7da1ed.
+- REAL:
+  - 1 agent session; 14 with unknown client and 2 zp-hooks-attest are not counted;
+  - item 1 3/3; item 2 unchanged, median withheld;
+  - item 3: 3 patterns before the first logged session, then 0 new in 1 session;
+  - item 4: W1 n=1, Û withheld.
+- YAML unit sentence updated to say "from a client declared as an agent; sessions of other clients, such as a commit hook, are not counted". Validators OK; 925 words.
+- READY TO TAG: `nist-metrology-2026-10b` at 75b8862. mcp-mayhem-48 cuts it after Tim confirms the name there. Metrology then verifies the tag with ls-remote and fills in the YAML Example line and implementation link.
