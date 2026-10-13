@@ -31,13 +31,14 @@ applied_definition: |
      listed with its age.
   2. **Time to guard**: for each guarded pattern, from first occurrence to the
      first commit at which both the guard and its regression test are in
-     place; report the median. When the occurrence time is
+     place; report the median. When any of the pattern's occurrence times is
      unknown, measure from detection, mark the value as a lower bound and leave
-     it out of the median.
+     it out of the median, which therefore errs optimistic: long lags gather
+     more incidents and are more often left out.
   3. **Discovery trend**: new patterns per batch of sessions.
   4. **Unseen-pattern estimate**: within a window of $n$ sessions with fixed
-     agent, tool and guard versions (every session counts, including those with
-     no observation), with $Q_1$ the patterns seen in exactly one session,
+     agent (model), tool and guard versions (every session counts, including
+     those with no observation), with $Q_1$ the patterns seen in exactly one session,
 
      $$\hat{U} = \frac{Q_1}{n}$$
 
@@ -110,8 +111,10 @@ known_failure_modes: |
   4. Sessions are what the guard layer logs, typically a client connection,
      not a conversation. Sessions that never touch the guard layer are not in
      $n$.
-  5. Versions are what the client reports. A model change the client does not
-     report silently pools windows.
+  5. Versions are only what is logged. The reference implementation logs the
+     guard layer's commit, the client's name and version and each guard's
+     version history, but no model version, so a model change silently pools
+     windows.
 
 references:
   - >-

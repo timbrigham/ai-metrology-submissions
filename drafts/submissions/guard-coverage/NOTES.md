@@ -297,3 +297,15 @@ The example is built but not committed. A fresh adversarial review found code is
 5. INC-0002 has detected_at = guarded_at; the tool flags it as "detected at fix time".
 6. ZeroParadox is a PUBLIC repository (visibility checked by mcp-mayhem-48), so naming it, DC-71 and its SHAs in the fixture is fine.
 - Held local commits in mcp-mayhem: 8851b35 (correct_guard) and b77a76f (the release-zip test fix). They ship with the example after review and Tim's OK. No tag yet.
+
+## Example review round 2: YAML-side items (2026-10-13)
+A second fresh review confirmed round 1's fixes: the salt leak is closed, recording is realistic, null-session refusals are handled, windows use version_history, and INC-0002 is flagged. It found no redaction leak and confirmed that U_n truth and the cluster bootstrap are correct. A final code and README round is in progress in mcp-mayhem.
+- Item 2 FIXED: the YAML now says "When any of the pattern's occurrence times is unknown … leave it out of the median, which therefore errs optimistic: long lags gather more incidents and are more often left out." The synthetic run shows about −9 h against a median injected lag of about 126 h.
+- Item 4 "agent versions" FIXED:
+  - The definition keeps "agent (model)", because a model change can alter what agents attempt.
+  - Known failure mode 5 now says the reference implementation logs the guard layer's commit, the client's name and version and each guard's version history, but NO model version, so a model change silently pools windows.
+- Synthetic summary: the primary figure for item 4 is BIAS with a 95% CI, plus RMSE against U_n. Coverage is demoted, because for a skewed discrete Q1 an unbiased estimate need not cover near 0.5.
+  - All synthetic figures are CONDITIONAL on n ≥ 100, an outcome-selected subset of about 19% of windows. The Example line must say so.
+- Window restarts: mcp-mayhem chose an optional per-guard `version_history`, tested, so no caveat is needed.
+- Schema OK; 906 words.
+- The Example TODO is filled from the tagged run.
