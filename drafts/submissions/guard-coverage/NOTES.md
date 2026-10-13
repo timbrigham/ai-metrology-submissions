@@ -255,3 +255,12 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 - Verified by metrology from a clean `git archive b6bae57` export: test_block_dotnet_relative_write.ps1 reports "ALL 25 CONTROLS BEHAVED", exit 0, including DC71-2/DC71-3 (the incident shape) and 7 mutation checks.
 - Proposed to mcp-mayhem-48: set_guarded for INC-0003/4/5 with guard_commit b6bae57, guarded_at 12:33:42Z, regression_test …::DC71-2/3. Tim confirms there. observed_at stays null, so time-to-guard is a lower bound from detection.
 - The first complete worked loop: observed → recorded open → guard built → tested → guarded. When marked, the register is 5 guarded / 0 open.
+
+## INC-0003/4/5 MARKED GUARDED, verified (2026-10-13)
+- mcp-mayhem-48 wrote it with Tim's approval in that session. Metrology read `.mcp-local/incidents/incidents.json` directly (read-only): 5 entries, all `guarded`, 0 open.
+- INC-0003/4/5: guard_commit b6bae57fbc6eb4cd2bc8f20e8a311991c986aff3, guarded_at 2026-10-13T12:33:42+00:00, regression_test `tools/verify/claude_hooks/test_block_dotnet_relative_write.ps1::DC71-2`. These match the proposal. A note on each names the implementation commits, DC71-3, the same entry point, the lower bound and the accepted gaps (python/node, scripts written then run, -EncodedCommand, the [IO.FileInfo] relative shape).
+- The earlier note on each entry still says "guard specified but unbuilt". The notes are append-only and the newer note supersedes it, so this is not an error.
+- Pattern-level time-to-guard for `powershell.dotnet-file-write.relative-path`, a LOWER bound measured from its first detected_at (2026-10-04T20:26:20Z): **8 d 16 h 07 m**. Per-incident: INC-0003/4 the same, INC-0005 4 d 10 h 50 m (from 2026-10-09T01:44Z). Every real case is a lower bound, so the median is withheld.
+- INC-0001 still names gitRobot 77c6d09 (it replays through `read`), pending `correct_guard` to ZeroParadox block_git_gh.ps1 and its test. Until then the guarded share depends on how that guard is counted; the example must use the corrected guard.
+- Also reported by mcp-mayhem-48: the ZeroParadox check_hashes.py repin is done (30a444b, narrowed in b2d36be), and Tim declined the gitRobot worktree-hint change. Neither affects this metric.
+- Next, in order (mcp-mayhem-48): the item 5 review fixes → correct_guard for INC-0001 → the worked example.
