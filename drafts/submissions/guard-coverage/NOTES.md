@@ -348,3 +348,22 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
 - block_git_gh.ps1 is registered for both the Bash and PowerShell matchers at 283157b, and the hook has existed since 872811c. The test sends tool_name PowerShell only; INC-0001's shell was not recorded. Accepted: the hook does not branch on the tool.
 - Values sent to mcp-mayhem-48 for correct_guard: guard_commit 283157b, guarded_at 2026-10-13T17:47:17+00:00, regression_test `tools/verify/claude_hooks/test_block_git_gh.ps1::GIT-INC0001`, entry point agent-shell. Provenance: the hook has denied all direct git since 872811c, 2026-08-23T14:22:18Z.
 - Expected real item 1: 3/3. Expected time to guard for git.reset.work-destroying: ≥ 51.89 d (from detected_at 2026-08-22T20:27:40Z), a lower bound.
+
+## INC-0001 corrected; example regenerated and RE-VERIFIED (2026-10-13)
+- mcp-mayhem 08ec670ff46a88e3f3dc92e15d099f7a6fc89629 is equal to origin/main. Tim confirmed the push in mcp-mayhem-48's session.
+  - Register: correct_guard on INC-0001 is set to 283157b / 17:47:17Z / GIT-INC0001; 77c6d09 is moved to guard_history ("gitrobot-mcp/cli (gitRobot read)").
+  - The manifest's test label is the plain "ZeroParadox block_git_gh hook suite, control GIT-INC0001", because make_fixture's redaction scan refused the consumer path.
+- Metrology checked a clean `git archive 08ec670` export:
+  - checksums 5/5; guardCoverage 62/62;
+  - `--json` equal to expected_report.json;
+  - synthetic output byte-identical to the f7da1ed run;
+  - leak scan clean: no paths, user names, raw session ids, .ps1 or claude-local.
+  - The new rows add client names claude-code 2.1.286 and zp-hooks-attest 1. Both are fine to publish.
+- REAL NOW:
+  - item 1 = 3/3;
+  - time to guard: reset ≥ 51.89 d, refspec ≥ 0.00 d (detected at fix time), dotnet ≥ 8.67 d; median withheld;
+  - 17 sessions, with no new patterns after the first batch;
+  - item 4: W1 n=1, W2 n=2, Û withheld.
+- ⚠ PRE-TAG FINDING (metrology → mcp-mayhem-48): W2 (17:41:54–17:47:17Z, n=2) matches ZeroParadox's commit and merge, and its sessions are almost certainly client `zp-hooks-attest`, which is hook automation, not an agent. The YAML's unit is the AGENT session, but the tool counts every client in n.
+  - No reported number changes, since Û is withheld either way. It is still a mismatch between the definition and the implementation, and cheap to fix.
+  - Asked for: the manifest declares the non-agent clients (or the agent clients); the tool excludes those sessions from n and from item 3's batches and reports how many it excluded; the README states it; the fixture and expected output are regenerated.
