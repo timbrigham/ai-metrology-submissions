@@ -194,3 +194,9 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 3. The κ errors show why the definition must require a declared, reviewed classification rule.
 
 **CORRECTION 2026-10-10 (verified by metrology after mcp-mayhem-48 flagged it):** the 1,308 git_ops records with an `AppData\Local\Temp\gitrobot-worktrees\<lane>` repo are NOT test traffic. They are real ZeroParadox operations in gitRobot's lane worktrees (626 commit, 461 stage, 217 attest, 4 unstage; actor mcp; 2026-09-20 → 10-09). Filtering them out discarded real evidence. They include 23 refusals (20 gate, 3 operational, 0 risky), so all 177 refusals are real, not 154. The "3 risky refusals" figure STANDS. The 3 'not-allowed' calls were deliberate live calls, not test-suite output. The test suite does not write to the production log (GITROBOT_DATA is unset).
+
+## Instrumentation landed (2026-10-13): consequences for this metric
+- Use `refusal_class` (d94f093), not regex, as κ's first cut. Only `policy` refusals are risky-attempt observations. Precedence (published in mcpcommon/vocabulary.py): operational if waiting or changing state clears it; gate if changing content or evidence does; otherwise policy. `allowlist` is the read allow-list only, and is the false-refusal signal.
+- ⚠ Exclude `op=attest` refusals: they are the hook asking whether it may skip its second run, not an agent attempting anything (mcp-mayhem-48's reviewer). Counting them would inflate gate.
+- Classes that differ from a naive reading: a push with '+' or ':' is policy; a push to a non-local branch name, or without a reason, is operational; "not a worktree" is policy if a foreign path exists, operational if the path has vanished.
+- `session` and `surface` (abdb679) supply the sampling unit. Rows before abdb679 / d94f093 lack these keys: absent means "before the field existed", never "unknown". Analyse pre- and post-field windows separately.
