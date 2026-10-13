@@ -234,3 +234,9 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
   - recovery of the injected lags.
   This answers "no evidence the method works".
 - The YAML Example field: at most 60 words, one line real plus one line synthetic, from the tagged run.
+
+## Tim's approvals (2026-10-13 Q&A), sent to mcp-mayhem-48
+- Instrumentation item 5, VERSIONS per session (gitRobot commit, MCP clientInfo name and version, ZeroParadox hook commit if available): **Yes**.
+- Public fixture: **redacted real extract + synthetic replay**. Keep only timestamps, op, refusal_class, pattern id, hashed session and versions. No file contents, args or private paths.
+- Correct INC-0001 to name the shell-layer guard (block_git_gh.ps1 + its test): **Yes**. The register forbids rewriting a guard, so mcp-mayhem-48 picks the method (annotate or supersede).
+- Sequence: item 5 → the example (tool + fixture + synthetic + README + review) → the DC-71 guard lands (zeroparadox session, confirming settings.json with Tim) → final numbers → verification → a NEW tag (name: Tim's call).
