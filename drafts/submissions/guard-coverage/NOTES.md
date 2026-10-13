@@ -450,3 +450,17 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - Attest exclusion: covered by "refusals not about the action's safety".
 - Now 940 words (siblings 802/907); Example 78; validators OK.
 - The article "Building NIST Submissions with AI Agents" is a private Claude Docs doc, revised after its own adversarial review. It needs one more fresh review before Tim shares it publicly.
+
+## Final review round (YAML review 4 + article review 2), 2026-10-13
+- YAML review 4: REVISE, 1 blocking. "blocked about 18 hours after detection" was unsupported.
+  - ZeroParadox 872811c's own message says the hooks were already wired through the ignored settings.local.json. That commit TRACKED them; it did not switch them on. Blocking may predate the incident. Metrology confirmed this read-only from the commit message.
+  - INC-0001's detected_at is also the earliest record (ba30b87), not a detection moment.
+  - Fixed. The Example now says "one, blocked by a hook committed the day after its first record, waited at least 51.9 days for a replaying test". Item 2 now measures "from the incident's first record".
+  - The 51.9-day lower bound still holds: an earlier detection only makes the true value larger.
+- Also: "estimates, slightly high, U_n" (Q1/n is unbiased for U_{n-1}); "1 of 3 patterns had a tested guard before the day measured"; synthetic "(19% of windows, 64% of sessions)", "near-zero absolute bias". 945 words; Example 78; validators OK.
+- ⚠ The TAGGED example README (nist2026, line 98) says the hook "has blocked every direct git call since 2026-08-23T14:22:18Z, about 18 hours after detection". "Since" is literally true, but "about 18 hours" implies a start time. Fixing it needs a new commit and re-tag (Tim's call). Reported to Tim and mcp-mayhem-48; not fixed.
+- Article review 2: REVISE, 3 blocking, all fixed:
+  - the table row now says "two of those guards and their tests were completed";
+  - "Ten of the errors caught and logged are below";
+  - "caught mostly by structure".
+  - Also applied: the same hook correction, the regex row now caught by "Self-check of the first pass", the tag rule reworded, and the diagram caption and title no longer claim "nothing crosses without a receipt".

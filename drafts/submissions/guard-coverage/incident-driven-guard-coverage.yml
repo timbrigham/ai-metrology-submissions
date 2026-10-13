@@ -30,8 +30,9 @@ applied_definition: |
   2. **Time to guard**: for each pattern in $G$, from first occurrence to the
      first commit at which guard and test are in place at every such entry
      point; report the median of exact values. If any occurrence time is
-     unknown, measure from detection and mark the value a lower bound. A
-     pattern guarded before it was first observed has no value.
+     unknown, measure from the incident's first record and mark the value a
+     lower bound. A pattern guarded before it was first observed has no
+     value.
   3. **Discovery trend**: new patterns per declared batch of sessions.
   4. **Unseen-pattern estimate**: in a window of $n$ sessions with fixed agent,
      tool and guard versions, including sessions with no observations, with
@@ -39,8 +40,8 @@ applied_definition: |
 
      $$\hat{U} = \frac{Q_1}{n}$$
 
-     estimates $U_n$, the expected number of patterns not recorded in the
-     window that are recorded in the next session. Recorded means refused by a
+     estimates, slightly high, $U_n$, the expected number of patterns not
+     recorded in the window that are recorded in the next session. Recorded means refused by a
      logging guard or entered in the register. $U_n$ is an upper bound on the
      probability that the next session records a new pattern. Report
      $\hat{U}$ with $n$, $Q_1$ and $Q_2$, and only when $n \ge 100$, a
@@ -75,12 +76,12 @@ usage_details: |
   loop (log, detect, respond, add a regression test) and reports how complete
   and how fast that loop is. It makes no claim that unobserved actions are covered.
 
-  Example. On real data, 1 of 3 patterns was guarded until the day measured
-  and 3 of 3 after two tested guards were completed that day; one was blocked
-  about 18 hours after detection but took at least 51.9 days to a tested
-  guard; the median and item 4 are withheld. On a synthetic replay,
-  conditional on $n \ge 100$, $\hat{U}$ is near-unbiased but imprecise (RMSE
-  about 70% of its mean) and is withheld in 81% of windows.
+  Example. On real data, 1 of 3 patterns had a tested guard before the day
+  measured and 3 of 3 after; one, blocked by a hook committed the day after
+  its first record, waited at least 51.9 days for a replaying test; the
+  median and item 4 are withheld. In a synthetic replay, for windows with
+  $n \ge 100$ (19% of windows, 64% of sessions), $\hat{U}$ has near-zero
+  absolute bias but an RMSE about 70% of its mean.
 
   Grounding: a newly proposed measurement; items 1-3 are counts and
   durations. Item 4 is the Good-Turing discovery probability on incidence data
