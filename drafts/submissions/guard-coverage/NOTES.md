@@ -334,3 +334,7 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - No C:\, C:/, Users, timbr, @, .mcp-local, Temp, token, password or raw session id.
   - DEVIATION from Tim's "no args": 72 refused rows keep a reduced `args`: read → a git verb name (ls-tree, grep, tag, reset, …); push → `{"branch":"b"}` (the shape of the refspec). It is documented in metadata.json as the rule-1 pattern feature. Benign, but Tim was told.
   - The salt is published, which is fine: it hashes only random MCP connection ids.
+- DECIDED (Tim, 2026-10-13):
+  - **Wait for the INC-0001 fix before tagging.** The sequence is: ZeroParadox reset control → metrology verifies it → correct_guard → the fixture and expected report are regenerated → metrology re-verifies from a clean export → tag.
+  - The fixture's reduced args are **accepted**.
+  - Tag name: no preference, so metrology picked **`nist-metrology-2026-10b`**, a sibling of the existing tag.
