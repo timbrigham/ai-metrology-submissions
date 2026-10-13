@@ -249,3 +249,9 @@ Source: `mcp-mayhem/.mcp-local/gitRobot/git_ops.jsonl`, actor=mcp. (The original
 - INC-0001 fix: a new verb `correct_guard`, with an append-only `guard_history` (reason, when, and the entry point the superseded guard covered). The tool reads the CURRENT guard for G and time-to-guard; history is provenance. The new guard is ZeroParadox block_git_gh.ps1 + its test (read-only lookup).
 - Item 5: the ZeroParadox hook commit will be null (gitRobot can't see it). Guard versions come from the guard-set manifest input, and the example README will say so.
 - Order: item 5 → correct_guard → the example. Tim confirmed "Yes, build it" in mcp-mayhem-48's session.
+
+## DC-71 GUARD LANDED and VERIFIED (2026-10-13)
+- ZeroParadox: 6312942 (hook, 12:11:14Z) → 36df2f5 (follow-up, 12:26:49Z) → merged into `illustrated` as b6bae57 at 2026-10-13T12:33:42Z, the moment it became active for agents. Registered in .claude/settings.json for both shells.
+- Verified by metrology from a clean `git archive b6bae57` export: test_block_dotnet_relative_write.ps1 reports "ALL 25 CONTROLS BEHAVED", exit 0, including DC71-2/DC71-3 (the incident shape) and 7 mutation checks.
+- Proposed to mcp-mayhem-48: set_guarded for INC-0003/4/5 with guard_commit b6bae57, guarded_at 12:33:42Z, regression_test …::DC71-2/3. Tim confirms there. observed_at stays null, so time-to-guard is a lower bound from detection.
+- The first complete worked loop: observed → recorded open → guard built → tested → guarded. When marked, the register is 5 guarded / 0 open.
