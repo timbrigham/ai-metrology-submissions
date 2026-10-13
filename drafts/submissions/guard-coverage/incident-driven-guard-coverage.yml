@@ -81,8 +81,11 @@ usage_details: |
   detect, respond, add a regression test) and reports how complete and how
   fast that loop is. It makes no claim that unobserved actions are covered.
 
-  Example. TODO: replace with one line of real-data output and one line of
-  synthetic-replay results from the tagged worked example.
+  Example. Real data from one deployment: 3 of 3 observed patterns guarded;
+  times to guard at least 0, 8.7 and 51.9 days (lower bounds, so no median);
+  $\hat{U}$ withheld (1 agent session). Synthetic replay, 1,000 replicates,
+  windows with $n \ge 100$ (19%): bias against $U_n$ +0.0004 (95% CI -0.0000
+  to +0.0009); RMSE 0.018 against a mean of 0.026, so imprecise.
 
   It complements the AI Metrology Center's "Agent / Tool Abuse Testing", which
   generates attempts, and "Post-deployment Feedback", which collects
@@ -130,7 +133,10 @@ references:
     https://doi.org/10.1145/3468264.3468570
 
 implementation_resources:
-  - "TODO: worked example in mcp-mayhem with a public fixture, pinned to a release tag"
+  - >-
+    https://github.com/timbrigham/mcp-mayhem/tree/nist-nov-2026/guardCoverage/examples/guard-coverage
+  - >-
+    https://github.com/timbrigham/mcp-mayhem/tree/nist-nov-2026/guardCoverage
 
 computational_requirements: >-
   CPU only, negligible cost. Python 3.11 or later, standard library only.

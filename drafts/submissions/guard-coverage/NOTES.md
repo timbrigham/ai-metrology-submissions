@@ -388,3 +388,13 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - item 4: W1 n=1, Û withheld.
 - YAML unit sentence updated to say "from a client declared as an agent; sessions of other clients, such as a commit hook, are not counted". Validators OK; 925 words.
 - READY TO TAG: `nist-metrology-2026-10b` at 75b8862. Tags are cut ONLY on Tim's own instruction in mcp-mayhem-48's session; mcp-mayhem-48 must not ask him about it. That session is holding. Metrology then verifies the tag with ls-remote and fills in the YAML Example line and implementation link.
+
+## TAGGED and RELEASED: `nist-nov-2026` (2026-10-13)
+- Tim tagged and released it himself (release published 18:31:13Z). It is a lightweight tag at **75b8862d4b1c340dcba55aca50e3edd4524da520**, verified with ls-remote. **The old tag `nist-metrology-2026-10` is REMOVED** from the remote (Tim's decision).
+- Consequence: ALL THREE submissions now cite `nist-nov-2026`.
+  - verdictLedger/ and inventoryFidelity/ are unchanged between 97d2988 and 75b8862 (empty diff).
+  - Re-verified from a clean export of the tag: inventoryFidelity 86/86; verdictLedger 651/652 (the known CRLF artifact of a Windows export); the evidence-currency example reproduces the YAML's stages (4/4 → 3+1 stale → 3+1+1 never examined → 5/5).
+- Guard-coverage YAML: implementation links filled; Example line filled (60 words, from the 75b8862 report and the seed-7 synthetic run); 953 words.
+- Validators: schema and inspect OK for all three YAMLs. Links: every repo link returns 200; the ACM DOIs return 302 to dl.acm.org, which returns 403 to scripts (bot blocking); the IEEE DOIs return 202.
+- PR.md written. Positioned against Detector Gap (#6), which measures variants within one pattern.
+- NEXT: a fresh adversarial review of the YAML and PR.md, then Tim's OK, then PR branches (Tim's call), one per YAML off upstream main.

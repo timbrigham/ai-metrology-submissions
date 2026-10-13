@@ -127,9 +127,9 @@ references:
 
 implementation_resources:
   - >-
-    https://github.com/timbrigham/mcp-mayhem/tree/nist-metrology-2026-10/inventoryFidelity/examples/inventory-fidelity
+    https://github.com/timbrigham/mcp-mayhem/tree/nist-nov-2026/inventoryFidelity/examples/inventory-fidelity
   - >-
-    https://github.com/timbrigham/mcp-mayhem/tree/nist-metrology-2026-10/inventoryFidelity
+    https://github.com/timbrigham/mcp-mayhem/tree/nist-nov-2026/inventoryFidelity
 
 computational_requirements: >-
   CPU only, negligible cost. Python 3.11 or later, standard library only.
