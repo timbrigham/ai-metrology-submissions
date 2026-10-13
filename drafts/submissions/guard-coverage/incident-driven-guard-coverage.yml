@@ -21,9 +21,8 @@ applied_definition: |
   id the guard layer logs, from a client declared as an agent; sessions of
   other clients, such as a commit hook, are not counted. A pattern counts once
   per session, whether it was seen as an incident, a refusal or both. An
-  incident whose session is
-  unknown (for example, one that went through a general shell) counts toward
-  $K$ and $G$ but not toward item 4.
+  incident whose session is unknown (for example, one that went through a
+  general shell) counts toward $K$ and $G$ but not toward item 4.
 
   Let $K$ be the patterns observed so far, and $G \subseteq K$ those with a
   guard and a regression test that replays the observed action through the
