@@ -387,4 +387,4 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
   - item 3: 3 patterns before the first logged session, then 0 new in 1 session;
   - item 4: W1 n=1, Û withheld.
 - YAML unit sentence updated to say "from a client declared as an agent; sessions of other clients, such as a commit hook, are not counted". Validators OK; 925 words.
-- READY TO TAG: `nist-metrology-2026-10b` at 75b8862. mcp-mayhem-48 cuts it after Tim confirms the name there. Metrology then verifies the tag with ls-remote and fills in the YAML Example line and implementation link.
+- READY TO TAG: `nist-metrology-2026-10b` at 75b8862. Tags are cut ONLY on Tim's own instruction in mcp-mayhem-48's session; mcp-mayhem-48 must not ask him about it. That session is holding. Metrology then verifies the tag with ls-remote and fills in the YAML Example line and implementation link.
