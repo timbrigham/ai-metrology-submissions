@@ -21,12 +21,12 @@ Evidence Currency measures, at a release or deployment decision, how much of the
 
 - **Maturity:**
   - This is a newly proposed method, primarily submitter-grounded, and not independently validated.
-  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at release tag `nist2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`).
+  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`).
   - Its worked example runs the YAML's scenario exactly and is pinned by tests.
-- **Primary specification:** the YAML's `applied_definition`, with the worked example's README as the reference implementation.
+- **Primary specification:** the YAML's `applied_definition`.
 - **Peer-reviewed support:** for the underlying principle only, not the metric itself.
-  - Ekstazi (ISSTA 2015): a recorded result is valid only while its inputs' hashes are unchanged.
-  - in-toto (USENIX Security 2019): decision-time checking of recorded evidence against artifact hashes.
+  - Gligoric, Eloussi and Marinov (ISSTA 2015, the Ekstazi tool): a recorded result is valid only while its inputs' hashes are unchanged.
+  - Torres-Arias et al. (USENIX Security 2019, in-toto): decision-time checking of recorded evidence against artifact hashes.
 - **Relation to the catalogue and open submissions:**
   - I found no AI Metrology Center entry on evidence staleness or provenance.
   - Audit-trail tamper detection (#16) measures malicious edits to a log.

@@ -483,3 +483,15 @@ Verified read-only: README-only diff (7+/6-) from 75b8862. The 18-hour claim is 
 2. Tim cuts one tag (also picks up README fix 875646f). Verify from clean export; repin all three.
 3. Rewrite the Example (synthetic figures are session-based) and PR.md maturity; the long-lived-session sentence; 'release tag' -> 'tag'.
 4. Fresh adversarial review; Tim's OK.
+
+## 2026-10-14 evening: first real policy-refusal observation; reference implementation run on live logs
+**Run:** clean `git archive` of mcp-mayhem 875646f (guardCoverage/), `python -m guard_coverage measure` on the LIVE `.mcp-local/gitRobot/git_ops.jsonl` + `.mcp-local/incidents/incidents.json` + the fixture manifest. As of 2026-10-14T22:46:58Z:
+- inputs: 7896 audit rows; 1 policy-refusal observation, 5 incident observations; 1 agent session (session unit).
+- item 1: |G|/|K| = 3/4. NEW pattern `gitrobot.worktree-target.any` (gitrobot-mcp/cli), unguarded: "no regression test declared for it at gitrobot-mcp/cli", age 0.01 days.
+- item 2: unchanged (>=51.89, >=0.00, >=8.67 days; median withheld).
+- item 3: batch 1 (1 session, partial): 1 new.
+- item 4 (sessions): W1 2026-10-13T15:02:32Z .. 22:46:58Z, n=1, Q1=1, Q2=0, withheld.
+- skipped non-policy refusals: allowlist 3, gate 2, operational 4 (these are NOT observations, by the implementation's own rule `refusal_class != "policy"`).
+**The refusal:** 2026-10-14T22:31:23Z, op worktree.target, class policy: an agent passed `worktree=C:\Workspace\ZeroParadox\.claude-local`, which git does not list as a worktree. gitRobot: it "will not accept a path git has not vouched for, because that is the general-proxy hole the repo modes exist to close." Made by the MAIN agent of conversation ad237cd6 (join), not a subagent. Its occurrence time is KNOWN (logged refusal): if a regression test is declared later, it gives the first EXACT time-to-guard value. If gitRobot already has such a test, guarded_at precedes the first observation and the pattern has no value (definition). Which one is for mcp-mayhem-48 to establish; NOT asked yet.
+**Subagent unit (scratch join, scratchpad/subagent_units.py, merged http_calls snapshot):** same span 15:02:31 .. 22:46:58; 1307 agent-client calls, all with toolUseId, all mapped; 286 instances = 3 conversations (16e1d86f 185 incl. 184 subagents; ad237cd6 96 incl. 95; 598417dc 5 incl. 4) = 283 subagents + 3 mains; one gitRobot session; one version window (gitRobot f813216, Claude Code 2.1.286). Q1 = 1, Q2 = 0 -> U-hat = 1/286 = 0.0035. The script's own refusal detection from http_calls is NOT reliable (substring heuristic over-counts); refusals were taken from git_ops (authoritative).
+**Docs updated (drafts):** YAML Example rewritten with these numbers + banner saying where each number comes from; guard-coverage PR.md maturity bullets (unit rationale; thin data); all three PR.md "release tag" -> "tag"; EC PR.md primary-spec wording and reference naming (Gligoric et al./Ekstazi, Torres-Arias et al./in-toto). These text changes need the fresh adversarial pass before posting.
