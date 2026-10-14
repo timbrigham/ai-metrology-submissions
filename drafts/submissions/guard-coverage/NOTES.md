@@ -467,3 +467,19 @@ A second fresh review confirmed round 1's fixes: the salt leak is closed, record
 
 ## 2026-10-13: README line-98 fix (mcp-mayhem 875646f, untagged)
 Verified read-only: README-only diff (7+/6-) from 75b8862. The 18-hour claim is removed; wording now matches the YAML Example (hook committed day after first record, 872811c, may have blocked earlier; >=51.9 days to replaying test 5bf7106, merged as 283157b). mcp-mayhem-48 reports 65 tests pass, fixture and expected_report unchanged. Goes into the single re-tag after Tim's data refresh. Refresh plan from mcp-mayhem-48: rerun make_fixture with the same salt, regenerate the README real-output block from a real run, recheck README prose numbers (session counts, n).
+
+## 2026-10-14: UNIT CHANGED to agent instance (subagent), Tim's decision
+**Why (Tim):** ZeroParadox sessions are intentionally long-lived and run many independent subagents; "the longer running sessions you're way more likely to run into weird s***", which is why the work is split into subagents. Counting sessions pools them; 100 sessions in a fixed version window would take months.
+**Evidence (read-only, 2026-10-13/14):**
+- git_ops.jsonl: all declared-agent-client rows (claude-code) are ONE gitRobot session, 9e7c8522..., across the whole day. A /clear in ZeroParadox started a new conversation (ad237cd6...) but gitRobot kept the same MCP session id: /clear is invisible to the guard layer.
+- gitRobot http_calls.jsonl requests carry _meta."claudecode/toolUseId". Each id appears in exactly one transcript (main or subagents/agent-*.jsonl), so call -> agent instance is a join. Spot-checked: toolu_011nSgu5... -> one subagent; the 4 calls after /clear -> ad237cd6 main.
+- Session 16e1d86f: 574 gitRobot tools/call (15:02-01:55 UTC); 514 mapped; 60 ids not yet in any transcript; 161 units (160 subagents + main); calls per unit median 2-3, max 19; 471 reads; 0 refusals; one version window. Q1 = 0, so U-hat would be 0 over ~160 instances.
+- un_id is a gate-run attestation id, NOT an agent id.
+- Script: scratchpad/subagent_units.py (one conversation dir; must be widened to all transcripts of the project). Snapshot of the rotating http_calls logs (28 MB, private) at scratchpad/snapshot-2026-10-14/.
+**Options considered:** calls (Tim's first idea; retries make Q1 optimistic, needs a collapse rule) vs subagent (fresh context, absorbs retries, matches deployment). Subagent chosen.
+**Done here (drafts only):** YAML Unit / items 3-4 / failure modes 3-4 rewritten for agent instances; DRAFT banner in YAML and PR.md.
+**Still PENDING before the YAML can be submitted:**
+1. Change request to mcp-mayhem-48 (NOT yet sent; needs Tim's approval there): log toolUseId into the append-only git_ops (http_calls rotates ~1 day), the call->instance join over all project transcripts, estimator unit switch, fixture regen (anonymised instance ids), synthetic replay, tests, README.
+2. Tim cuts one tag (also picks up README fix 875646f). Verify from clean export; repin all three.
+3. Rewrite the Example (synthetic figures are session-based) and PR.md maturity; the long-lived-session sentence; 'release tag' -> 'tag'.
+4. Fresh adversarial review; Tim's OK.

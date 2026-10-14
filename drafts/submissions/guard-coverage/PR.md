@@ -1,6 +1,7 @@
+<!-- DRAFT 2026-10-14: unit changed from session to agent instance (subagent). Maturity bullets still describe the session-based nist2026 example; update after the implementation refresh, add the long-lived-session sentence, fix 'release tag' -> 'tag'. Remove this comment before posting. -->
 ## Metric submission
 
-Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of how many not-yet-recorded patterns the next agent session will record.
+Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of how many not-yet-recorded patterns the next agent instance, such as a subagent, will record.
 
 ## Checklist
 
