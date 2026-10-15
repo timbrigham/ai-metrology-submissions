@@ -113,9 +113,9 @@ references:
 
 implementation_resources:
   - >-
-    https://github.com/timbrigham/mcp-mayhem/tree/nist2026/verdictLedger/examples/evidence-currency
+    https://github.com/timbrigham/mcp-mayhem/tree/nist2026.1/verdictLedger/examples/evidence-currency
   - >-
-    https://github.com/timbrigham/mcp-mayhem/tree/nist2026/verdictLedger
+    https://github.com/timbrigham/mcp-mayhem/tree/nist2026.1/verdictLedger
 
 computational_requirements: >-
   CPU only, negligible cost. Python 3.11+ and git 2.28+, standard library only,

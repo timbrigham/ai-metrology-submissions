@@ -516,3 +516,18 @@ mcp-mayhem-48 pushed 34713d5 (gitRobot tool_calls.jsonl, client_call_id on every
 - The gap from 2026-10-14T22:46:58Z to 10-15T10:32:14Z rotated out of http_calls before anyone copied it. Those 76 claude-code audit rows have no instance.
 - The 301 window figure is W1 from 2026-10-13T15:02:31Z to 10-15T14:19:44Z, from the public fixture. The YAML Example and PR.md now use it, along with 4/4 and "guarded before first observation". The synthetic share now says "64% of instances" (63.6%). The RMSE of 0.0180 against a mean of 0.0262 is 69%, so "about 70%" stands.
 - NEXT: Tim cuts the tag (it covers 875646f, 34713d5 and 627b69b). Then re-verify at the tag, repin all three YAMLs and PR.mds, remove the banners, run the adversarial review and get Tim's read.
+
+## Repinned to nist2026.1 (2026-10-15)
+
+Tim had mcp-mayhem-48 cut annotated tag `nist2026.1`: object 650f4148, commit 627b69bba094cb41e7e7bd67d20ffdc5079cfcd0. `nist2026` is unchanged (75b8862).
+- Checked with ls-remote and a local fetch (without --prune-tags).
+- A `git archive nist2026.1` export is identical to the verified 627b69b export, ignoring caches.
+- Tests from that export:
+  - guardCoverage 114/114;
+  - inventoryFidelity 86/86;
+  - gitRobot 586/586 (their count, now confirmed);
+  - verdictLedger 651/652, the known CRLF-on-Windows-export control.
+- verdictLedger and inventoryFidelity have no diff from 75b8862 to 627b69b.
+- Test environment: the server tests need the `mcp` extra. Its declared `mcp>=1.2` resolves today to mcp 2.x, which lacks `mcp.server.fastmcp`, so a fresh install fails collection. The tests pass with `mcp<2`. Reported to mcp-mayhem-48. It does not affect the metric implementations, which use only the standard library.
+- All three YAMLs and PR.md files are repinned (links /tree/nist2026.1/…; tag and commit in PR.md); the six links return 200. The DRAFT banners are removed, and schema and inspect validation pass for all three.
+- NEXT: a fresh adversarial review of the GC YAML and PR.md and the EC and IF PR.md changes, then Tim's read and OK.

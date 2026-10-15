@@ -21,7 +21,7 @@ Evidence Currency measures, at a release or deployment decision, how much of the
 
 - **Maturity:**
   - This is a newly proposed method, primarily submitter-grounded, and not independently validated.
-  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`).
+  - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026.1` (commit `627b69bba094cb41e7e7bd67d20ffdc5079cfcd0`).
   - Its worked example runs the YAML's scenario exactly and is pinned by tests.
 - **Primary specification:** the YAML's `applied_definition`.
 - **Peer-reviewed support:** for the underlying principle only, not the metric itself.
