@@ -1,4 +1,4 @@
-<!-- DRAFT 2026-10-14: unit changed from session to agent instance (subagent). Maturity numbers are as of 2026-10-14T22:46:58Z and must be regenerated from the updated implementation; the "worked example ... reproduces exactly" bullet, the tag and the commit hash describe nist2026 and change at the refresh. Remove this comment before posting. -->
+<!-- DRAFT 2026-10-15: figures from mcp-mayhem 627b69b (untagged). The tag and commit hash below still describe nist2026; repin to Tim's new tag, re-verify, then remove this comment. -->
 ## Metric submission
 
 Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of how many not-yet-recorded patterns the next agent instance, such as a subagent, will record.
@@ -24,8 +24,8 @@ Incident-Driven Guard Coverage measures how well regression-tested guards on an 
   - This is a newly proposed method, not independently validated.
   - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026` (commit `75b8862d4b1c340dcba55aca50e3edd4524da520`). It uses only the Python standard library.
   - The worked example runs on a public, redacted extract of that environment's real logs and incident register, with checksums, and reproduces the report exactly under test.
-  - The unit is the agent instance because of how this environment runs: one long-lived agent client process, whose connection to the guard layer outlives conversations, spawns many short-lived subagents. Counting sessions gave one session for two days of work; counting instances gave 286 in one version window.
-  - The real data is still thin: four observed patterns and a single pattern recorded in that window. The three guarded patterns have no known occurrence time, so their time to guard is only a lower bound and the median is withheld.
+  - The unit is the agent instance because of how this environment runs: one long-lived agent client process, whose connection to the guard layer outlives conversations, spawns many short-lived subagents. Counting sessions gave one session for two days of work; counting instances gave 301 in one version window.
+  - The real data is still thin: four observed patterns and a single pattern recorded in that window. Three have no known occurrence time, so their time to guard is only a lower bound; the fourth was guarded before it was first observed. The median is therefore withheld.
   - Time to guard and the unseen-pattern estimate are therefore also shown on a seeded synthetic replay, which the example labels as synthetic. The replay uses one setting under the estimator's own assumptions, so it checks the implementation, not the method.
 - **Primary specification:** the YAML's `applied_definition`; the worked example runs the reference implementation on a public fixture.
 - **Peer-reviewed support:** for the unseen-pattern estimate only. Items 1-3 are plain counts and durations.

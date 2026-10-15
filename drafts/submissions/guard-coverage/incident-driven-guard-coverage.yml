@@ -1,9 +1,6 @@
-# DRAFT 2026-10-14 (Tim): the unit is now the agent instance (e.g. a subagent), not the session.
-# Example real-data numbers are as of 2026-10-14T22:46:58Z: items 1-3 from the tagged
-# implementation (875646f) run on the live logs; item 4 from a scratch call->subagent join
-# (the implementation still counts sessions: n=1). The synthetic figures are session-based and
-# the links still point at nist2026. Regenerate ALL from the updated implementation before
-# submitting. Do NOT submit until they match; remove this comment.
+# DRAFT 2026-10-15: figures regenerated from mcp-mayhem 627b69b (untagged; verified from a clean
+# git archive). The links still point at nist2026. Repin to Tim's new tag, re-verify, then remove
+# this comment. Do NOT submit before that.
 schema_version: "1.0"
 
 name: Incident-Driven Guard Coverage
@@ -83,13 +80,13 @@ usage_details: |
   loop (log, detect, respond, add a regression test) and reports how complete
   and how fast that loop is. It makes no claim that unobserved actions are covered.
 
-  Example. On real data, 3 of 4 patterns have a tested guard; the fourth was
-  refused the first time an agent tried it but has no regression test yet. One
-  guarded pattern, blocked by a hook committed the day after its first record,
-  waited at least 51.9 days for a replaying test. In one version window of
-  $n = 286$ agent instances, $Q_1 = 1$ and $Q_2 = 0$, so
-  $\hat{U} \approx 0.0035$. In a synthetic replay, for windows with
-  $n \ge 100$ (19% of windows, 64% of sessions), $\hat{U}$ has near-zero
+  Example. On real data, all 4 observed patterns have a tested guard. One was
+  refused the first time an agent tried it, by a guard tested 41 days earlier,
+  so it has no time to guard. Another, blocked by a hook committed the day
+  after its first record, waited at least 51.9 days for a replaying test. In
+  one version window of $n = 301$ agent instances, $Q_1 = 1$ and $Q_2 = 0$,
+  so $\hat{U} \approx 0.0033$. In a synthetic replay, for windows with
+  $n \ge 100$ (19% of windows, 64% of instances), $\hat{U}$ has near-zero
   absolute bias but an RMSE about 70% of its mean.
 
   Grounding: a newly proposed measurement; items 1-3 are counts and
