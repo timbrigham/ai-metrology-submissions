@@ -1,6 +1,6 @@
 ## Metric submission
 
-Evidence Currency measures, at a release or deployment decision, how much of the recorded evaluation evidence behind that decision was produced against the exact files being released. It reports current, stale and never-examined evidence separately, so a release claim such as "safety-evaluated" can be checked against the bytes actually shipped.
+Evidence Currency measures, at a release or deployment decision, what share of the files each release check owes a verdict for have a recorded result produced against the exact bytes being released. It reports current, stale and never-examined evidence separately, so a release claim such as "safety-evaluated" can be checked against the bytes actually shipped.
 
 ## Checklist
 
@@ -20,7 +20,7 @@ Evidence Currency measures, at a release or deployment decision, how much of the
 ## Additional context
 
 - **Maturity:**
-  - This is a newly proposed method, primarily submitter-grounded, and not independently validated.
+  - This is a newly proposed method, not independently validated.
   - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026.1` (commit `627b69bba094cb41e7e7bd67d20ffdc5079cfcd0`).
   - Its worked example runs the YAML's scenario exactly and is pinned by tests.
 - **Primary specification:** the YAML's `applied_definition`.
@@ -32,4 +32,4 @@ Evidence Currency measures, at a release or deployment decision, how much of the
   - Audit-trail tamper detection (#16) measures malicious edits to a log.
   - Tool-descriptor mutation detection (#20) measures how much of a definition a pin covers.
   - Cross-carrier non-measurement fidelity (#23) shares the rule that "not examined is not a pass", but does not bind evidence to content.
-- **Context:** this comes from applying security audit practice to AI agents, i.e. checking whether audit evidence is still valid for the system being shipped.
+- **Context:** this comes from applying security audit practice to AI system releases, i.e. checking whether audit evidence is still valid for the system being shipped.

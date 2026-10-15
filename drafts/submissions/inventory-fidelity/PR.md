@@ -1,6 +1,6 @@
 ## Metric submission
 
-AI Inventory Fidelity measures whether an organisation's inventory of an AI system's components (prompts, tool definitions, guardrail configurations, model and dataset digests) describes what is actually deployed. It reconciles the inventory against a scan of the deployment by name and content hash, and reports inventory precision and recall.
+AI Inventory Fidelity measures whether an organisation's inventory of an AI system's components (prompts, tool definitions, guardrail configurations, model and dataset digests) describes what is actually deployed. It reconciles the inventory against an observation of the deployment, such as a file scan, by name and content hash, and reports inventory precision and recall.
 
 ## Checklist
 
@@ -25,7 +25,7 @@ AI Inventory Fidelity measures whether an organisation's inventory of an AI syst
   - It uses only the Python standard library, and its worked example reproduces the YAML's numbers exactly under test.
 - **Primary specification:** the YAML's `applied_definition`.
 - **Peer-reviewed support:** for the underlying measurement only.
-  - Balliu et al. (IEEE S&P 2023) and Yu et al. (DSN 2024) measure SBOM precision and recall against ground truth.
+  - Balliu et al. (IEEE Security & Privacy magazine, 2023) and Yu et al. (DSN 2024) measure SBOM precision and recall against ground truth.
   - This method moves that measurement from SBOM tool output to an organisation's own AI inventory. It adds content hashes for unversioned AI artifacts and reports the outcome classes separately.
 - **Relation to the catalogue and open submissions:**
   - I found no AI Metrology Center entry on inventory or bill-of-materials accuracy.

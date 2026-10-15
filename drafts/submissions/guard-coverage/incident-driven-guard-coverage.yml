@@ -16,6 +16,9 @@ applied_definition: |
   intercepts an action, such as the agent's shell or a tool server), their
   regression tests, and which clients are agents.
 
+  An observation's detection time is the refusal's log time, or the
+  detection time recorded in the incident register.
+
   A guard that does not log refusals contributes none, and refusals not about
   the action's safety are not observations. A declared, versioned
   classification rule maps each observation to a **pattern**.
@@ -31,12 +34,13 @@ applied_definition: |
   and asserts it is refused. Items 1-3 are cumulative:
 
   1. **Guarded share** $|G|/|K|$, with each unguarded pattern listed with its
-     age since detection.
+     age since first occurrence (detection if unknown,
+     then a lower bound).
   2. **Time to guard**: for each pattern in $G$, from first occurrence to the
      first commit at which guard and test are in place at every such entry
      point; report the median of exact values. If any occurrence time is
-     unknown, measure from detection and mark the value a
-     lower bound. A pattern guarded before it was first observed has no
+     unknown, measure from the earliest occurrence or detection time and
+     mark the value a lower bound. A pattern guarded before it was first observed has no
      value.
   3. **Discovery trend**: new patterns per declared batch of agent instances,
      each placed by its first occurrence (detection if unknown); patterns
@@ -53,9 +57,11 @@ applied_definition: |
      recorded (as a logged refusal or a register entry) in the next
      instance. $U_n$ is an upper bound on the probability that the next
      instance records a new pattern. Report $\hat{U}$ with $n$, $Q_1$ and
-     $Q_2$, and only when $n \ge 100$, a threshold chosen by the submitter,
-     and no refusal in the window lacks an instance; otherwise report the
-     counts. The window restarts when any version changes.
+     $Q_2$ only when $n \ge 100$ (a threshold chosen by the submitter) and
+     no policy refusal in the window lacks an instance. Otherwise report only
+     the counts. Incidents with no instance are reported as excluded, so
+     $\hat{U}$ then covers only refusals. The window restarts when any
+     version changes.
 
 submitter_organizations:
   - Tim Brigham (independent researcher)
@@ -114,8 +120,9 @@ known_failure_modes: |
      classify at the point of refusal, not afterwards from text.
   3. Detection lag and missing instances bias $Q_1$ low: recent incidents may
      not be found yet, and incidents with no known instance are left out of
-     $Q_1$ while their instances stay in $n$. Restrict item 4 to instances older
-     than a declared lag.
+     $Q_1$ while the instances that produced them may still be counted in $n$.
+     Restricting item 4 to instances older than a declared lag would help;
+     the reference implementation does not.
   4. Instances are only as the client identifies them; a client that logs only
      connections pools many agents into one heterogeneous unit. Instances that
      never touch the guard layer are not in $n$. Instances are not independent:

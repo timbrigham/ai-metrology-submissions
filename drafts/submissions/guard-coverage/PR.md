@@ -1,6 +1,6 @@
 ## Metric submission
 
-Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports the share of observed patterns that have a guard and a test replaying the observed action, the time from first occurrence to that tested guard, the discovery trend, and an estimate of the expected number of not-yet-recorded patterns the next agent instance, such as a subagent, will record.
+Incident-Driven Guard Coverage measures how well regression-tested guards on an AI agent's tool use keep up with the risky actions agents are observed to attempt. It reports four things: the share of observed patterns that have a guard and a test replaying the observed action; the time from first occurrence to that tested guard; the discovery trend; and an estimate of the expected number of not-yet-recorded patterns that the next agent instance, such as a subagent, will record.
 
 ## Checklist
 
@@ -23,9 +23,9 @@ Incident-Driven Guard Coverage measures how well regression-tested guards on an 
   - This is a newly proposed method, not independently validated.
   - The reference implementation is a single-author proof of concept used in one dedicated environment, pinned at tag `nist2026.1` (commit `627b69bba094cb41e7e7bd67d20ffdc5079cfcd0`). It uses only the Python standard library.
   - The worked example runs on a public, redacted extract of that environment's real logs and incident register, with checksums, and reproduces the report exactly under test.
-  - The unit is the agent instance because of how this environment runs: one long-lived agent client process, whose connection to the guard layer outlives conversations, spawns many short-lived subagents. In the published data, all 301 agent instances in one two-day version window called the guard layer over a single MCP session, so a session unit would give n = 1. Calls in a 12-hour gap in that window could not be recovered, so n undercounts; the example README gives details.
+  - The unit is the agent instance because of how this environment runs: one long-lived agent client process, whose connection to the guard layer (the tool server that enforces the guards) outlives conversations, spawns many short-lived subagents. In the published data, all 301 agent instances in one two-day version window called the guard layer over a single Model Context Protocol (MCP) session, so a session unit would give n = 1. Calls in an almost 12-hour gap in that window could not be recovered, so n undercounts; the example README gives details.
   - The real data is still thin: four observed patterns and a single pattern recorded in that window. Three have no known occurrence time, so their time to guard is only a lower bound; the fourth was guarded before it was first observed. The median is therefore withheld.
-  - Time to guard and the unseen-pattern estimate are also shown on a seeded synthetic replay, which the example labels as synthetic.
+  - Time to guard and the unseen-pattern estimate are also shown on a seeded synthetic replay, which the example labels as synthetic; it checks the implementation, not the method.
 - **Primary specification:** the YAML's `applied_definition`; the worked example runs the reference implementation on a public fixture.
 - **Peer-reviewed support:** for the unseen-pattern estimate only. Items 1-3 are plain counts and durations.
   - Böhme (TOSEM 2018) treats software testing as species discovery and uses the Good-Turing discovery probability as a residual-risk measure.
