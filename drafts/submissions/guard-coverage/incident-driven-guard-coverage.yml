@@ -46,8 +46,9 @@ applied_definition: |
 
      $$\hat{U} = \frac{Q_1}{n}$$
 
-     estimates $U_n$, slightly high when instances are independent, the expected number of patterns not
-     recorded in the window that are recorded in the next instance. Recorded
+     estimates $U_n$, slightly high when instances are independent. $U_n$ is
+     the expected number of patterns not recorded in the window that are
+     recorded in the next instance. Recorded
      means refused by a logging guard or entered in the register. $U_n$ is an
      upper bound on the probability that the next instance records a new
      pattern. Report $\hat{U}$ with $n$, $Q_1$ and $Q_2$, and only when
